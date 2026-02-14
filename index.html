@@ -4,101 +4,129 @@
     <meta charset="UTF-8">
     <title>Thematic Vocabulary Hub</title>
     <style>
-        body { font-family: sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
-        .app-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .app-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
         .hidden { display: none; }
-        .btn { width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: white; }
+        .btn { width: 100%; margin: 10px 0; padding: 15px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; color: white; }
         .btn-menu { background: #fff; color: #333; border: 1px solid #ddd; text-align: left; }
-        .btn-listen { background: #4CAF50; }
-        .btn-read { background: #2196F3; }
-        .btn-show { background: #FF9800; }
-        .btn-next { background: #37474f; padding: 20px; font-size: 1.2rem; }
+        .btn-1 { background: #4CAF50; }
+        .btn-2 { background: #2196F3; }
+        .btn-3 { background: #FF9800; }
+        .btn-next { background: #37474f; padding: 20px; font-size: 1.2rem; margin-top: 15px; }
         .btn:disabled { background: #ccc; cursor: not-allowed; }
-        .box { margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 8px; border-left: 5px solid #2196F3; text-align: left; font-style: italic; }
-        .word { font-size: 2rem; color: #d32f2f; font-weight: bold; margin: 15px 0; }
+        .display-box { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 5px solid #2196F3; text-align: left; font-style: italic; color: #444; }
+        .word-reveal { font-size: 2.2rem; color: #d32f2f; font-weight: bold; text-transform: uppercase; margin: 15px 0; }
     </style>
 </head>
 <body>
     <div class="app-card">
-        <div id="menu">
+        <div id="dashboard">
             <h2>Thematic English</h2>
-            <button class="btn btn-menu" onclick="start('Crime')">⚖️ Group 1: Crime</button>
-            <button class="btn btn-menu" onclick="start('Money')">💰 Group 2: Money</button>
+            <div id="menuBtns">
+                <button class="btn btn-menu" onclick="initSubject('Crime')">⚖️ Group 1: Crime</button>
+                <button class="btn btn-menu" onclick="initSubject('Money')">💰 Group 2: Money</button>
+            </div>
         </div>
 
-        <div id="study" class="hidden">
-            <button onclick="location.reload()" style="float:left; background:none; border:none; color:blue; cursor:pointer;">← Menu</button>
-            <h3 id="title"></h3>
-            <p id="count">Vocab 1</p>
+        <div id="studyView" class="hidden">
+            <button onclick="location.reload()" style="float:left; border:none; background:none; color:blue; cursor:pointer;">← Menu</button>
+            <h3 id="catTitle"></h3>
+            <p id="vocabCounter" style="font-weight:bold; color:#888;">Vocab 1</p>
             <audio id="player"></audio>
             
-            <button id="b1" class="btn btn-listen" onclick="doStep(1)">1. Listen</button>
-            <button id="b2" class="btn btn-read" onclick="doStep(2)" disabled>2. Read & Listen</button>
-            <button id="b3" class="btn btn-show" onclick="doStep(3)" disabled>3. Show</button>
+            <button id="step1" class="btn btn-1" onclick="playPart(1)">1. Listen</button>
+            <button id="step2" class="btn btn-2" onclick="playPart(2)" disabled>2. Read & Listen</button>
+            <button id="step3" class="btn btn-3" onclick="showWord()" disabled>3. Show</button>
 
-            <div id="pText" class="box hidden"></div>
-            <div id="pWord" class="word hidden"></div>
-            <button id="bNext" class="btn btn-next hidden" onclick="goNext()">NEXT WORD →</button>
+            <div id="textPanel" class="display-box hidden"></div>
+            <div id="wordPanel" class="word-reveal hidden"></div>
+            <button id="nextBtn" class="btn btn-next hidden" onclick="goNext()">NEXT WORD →</button>
         </div>
     </div>
 
     <script>
-        const data = {
+        const repoData = {
             "Crime": { file: "crime top 8 female.wav", items: [
                 { s: 0.2, e: 11.2, t: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", w: "Pickpocket" },
-                { s: 12.2, e: 24.2, t: "This is a criminal who intentionally starts fires to destroy buildings or cars.", w: "Arsonist" },
-                { s: 25.2, e: 39.2, t: "This is money or a gift that you give to someone illegally to get them to do something dishonest.", w: "Bribe" },
-                { s: 40.2, e: 54.2, t: "This is the money that kidnappers demand. You must pay this to get a captured person back safely.", w: "Ransom" },
-                { s: 55.2, e: 69.2, t: "This is a person who is captured and held prisoner by criminals to force others to pay money.", w: "Hostage" },
-                { s: 70.2, e: 84.2, t: "This is an illegal system or place where people buy and sell things that are banned.", w: "Black market" },
-                { s: 85.2, e: 99.2, t: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", w: "Blackmail" },
-                { s: 100.2, e: 114.2, t: "This is a person who lends money to people but demands a very high payment back.", w: "Loan shark" }
+                { s: 12.2, e: 24.3, t: "This is a criminal who intentionally starts fires to destroy buildings or cars.", w: "Arsonist" },
+                { s: 25.2, e: 39.3, t: "This is money or a gift that you give to someone (like an official) illegally to get them to do something dishonest for you.", w: "Bribe" },
+                { s: 40.2, e: 54.3, t: "This is the money that kidnappers demand. You must pay this to get a captured person back safely.", w: "Ransom" },
+                { s: 55.2, e: 69.3, t: "This is a person who is captured and held prisoner by criminals to force others to pay money.", w: "Hostage" },
+                { s: 70.2, e: 84.3, t: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", w: "Black market" },
+                { s: 85.2, e: 99.3, t: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", w: "Blackmail" },
+                { s: 100.2, e: 114.3, t: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", w: "Loan shark" }
             ]},
             "Money": { file: "money top 8 male.wav", items: [
-                { s: 0.2, e: 14.2, t: "This is money that you must pay to the government to pay for public things like roads and schools.", w: "Tax" },
-                { s: 15.2, e: 33.2, t: "This is the extra money you pay when you borrow money, or the extra money a bank gives you for saving.", w: "Interest" },
-                { s: 34.2, e: 49.2, t: "This is one part of a total payment. You pay smaller amounts every month until the debt is finished.", w: "Installment" },
-                { s: 50.2, e: 63.2, t: "This is the final day or deadline when you must pay a bill or return borrowed money.", w: "Due date" },
-                { s: 64.2, e: 75.2, t: "This is a person or bank that lends money to others and expects to be paid back.", w: "Creditor" },
-                { s: 76.2, e: 94.2, t: "This is a person who promises to pay someone else's debt if that person cannot pay it.", w: "Guarantor" },
-                { s: 95.2, e: 118.2, t: "This is money you give to a landlord before you use their property (deposit).", w: "Caution money" },
-                { s: 119.2, e: 134.2, t: "This is a person who owes money to a bank or another person.", w: "Debtor" }
+                { s: 0.2, e: 14.3, t: "This is money that you must pay to the government to pay for public things like roads and schools.", w: "Tax" },
+                { s: 15.2, e: 33.3, t: "This is the extra money you pay when you borrow money, or the extra money a bank gives you for saving.", w: "Interest" },
+                { s: 34.2, e: 49.3, t: "This is one part of a total payment. You pay smaller amounts every month until the debt is finished.", w: "Installment" },
+                { s: 50.2, e: 63.3, t: "This is the final day or deadline when you must pay a bill or return borrowed money.", w: "Due date" },
+                { s: 64.2, e: 75.3, t: "This is a person or bank that lends money to others and expects to be paid back.", w: "Creditor" },
+                { s: 76.2, e: 94.3, t: "This is a person who promises to pay someone else's debt if that person cannot pay it.", w: "Guarantor" },
+                { s: 95.2, e: 118.3, t: "This is money you give to a landlord before you use their property (deposit). They keep it to make sure you do not break anything.", w: "Caution money" },
+                { s: 119.2, e: 134.3, t: "This is a person who owes money to a bank or another person.", w: "Debtor" }
             ]}
         };
 
-        let cat = ""; let idx = 0; const aud = document.getElementById('player');
+        let currentCat = ""; let index = 0; let stopTime = 0;
+        const audio = document.getElementById('player');
 
-        function start(c) {
-            cat = c; idx = 0; aud.src = encodeURI(data[c].file);
-            document.getElementById('menu').classList.add('hidden');
-            document.getElementById('study').classList.remove('hidden');
-            document.getElementById('title').innerText = c;
-            reset();
+        function initSubject(cat) {
+            currentCat = cat; index = 0;
+            audio.src = encodeURI(repoData[cat].file);
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('studyView').classList.remove('hidden');
+            document.getElementById('catTitle').innerText = cat;
+            resetUI();
         }
 
-        function doStep(step) {
-            const item = data[cat].items[idx];
-            if (step === 1 || step === 2) {
-                aud.pause(); aud.currentTime = item.s; aud.play();
-                const timer = setInterval(() => {
-                    if (aud.currentTime >= item.e) { aud.pause(); clearInterval(timer); if(step === 1) document.getElementById('b2').disabled = false; }
-                }, 100);
+        function playPart(step) {
+            const item = repoData[currentCat].items[index];
+            stopTime = item.e;
+            audio.pause();
+            audio.currentTime = item.s;
+            
+            if (step === 2) {
+                document.getElementById('textPanel').innerText = item.t;
+                document.getElementById('textPanel').classList.remove('hidden');
+                document.getElementById('step3').disabled = false;
             }
-            if (step === 2) { document.getElementById('pText').innerText = item.t; document.getElementById('pText').classList.remove('hidden'); document.getElementById('b3').disabled = false; }
-            if (step === 3) { document.getElementById('pWord').innerText = item.w; document.getElementById('pWord').classList.remove('hidden'); document.getElementById('bNext').classList.remove('hidden'); }
+
+            audio.play();
+            // Radical Stop Logic: Checks every 50ms to kill the audio immediately
+            const checker = setInterval(() => {
+                if (audio.currentTime >= stopTime) {
+                    audio.pause();
+                    clearInterval(checker);
+                    if (step === 1) document.getElementById('step2').disabled = false;
+                }
+            }, 50);
+        }
+
+        function showWord() {
+            document.getElementById('wordPanel').innerText = repoData[currentCat].items[index].w;
+            document.getElementById('wordPanel').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
         }
 
         function goNext() {
-            if (idx < 7) { idx++; reset(); aud.pause(); } 
-            else { alert("Done!"); location.reload(); }
+            if (index < 7) {
+                index++;
+                resetUI();
+                audio.pause(); // Safety stop
+            } else {
+                alert("Mastered!");
+                location.reload();
+            }
         }
 
-        function reset() {
-            document.getElementById('count').innerText = "Vocab " + (idx + 1);
-            document.getElementById('pText').classList.add('hidden');
-            document.getElementById('pWord').classList.add('hidden');
-            document.getElementById('bNext').classList.add('hidden');
-            document.getElementById('b2').disabled = true; document.getElementById('b3').disabled = true;
+        function resetUI() {
+            document.getElementById('vocabCounter').innerText = `Vocab ${index + 1}`;
+            document.getElementById('textPanel').classList.add('hidden');
+            document.getElementById('wordPanel').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('step2').disabled = true;
+            document.getElementById('step3').disabled = true;
         }
     </script>
 </body>
