@@ -11,18 +11,13 @@
         .menu-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
         .subject-btn { padding: 15px; font-size: 1.1rem; border: 1px solid #ddd; border-radius: 10px; background: #fff; cursor: pointer; text-align: left; }
         .subject-btn:hover { background: #007bff; color: white; }
-        
-        /* Buttons from your sketch */
         .step-btn { width: 100%; margin: 10px 0; padding: 15px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; color: white; }
         .btn-1 { background: #4CAF50; }
         .btn-2 { background: #2196F3; }
         .btn-3 { background: #FF9800; }
         .step-btn:disabled { background: #ccc; cursor: not-allowed; }
-        
         .display-box { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; min-height: 40px; line-height: 1.4; color: #444; font-style: italic; }
         .word-reveal { font-size: 2.2rem; color: #d32f2f; font-weight: bold; text-transform: uppercase; margin: 15px 0; }
-        
-        /* The Big Next Button requirement */
         .next-btn { background: #37474f; color: white; width: 100%; padding: 18px; border: none; border-radius: 8px; margin-top: 15px; cursor: pointer; font-size: 1.1rem; font-weight: bold; }
     </style>
 </head>
@@ -40,7 +35,7 @@
             <div style="text-align: left; margin-bottom: 10px;">
                 <a href="#" onclick="exitToMenu()" style="color: #007bff; text-decoration: none; font-size: 0.9rem; font-weight: bold;">← MENU</a>
             </div>
-            <h3 id="catTitle" style="margin: 0; text-transform: uppercase; letter-spacing: 1px;">Category</h3>
+            <h3 id="catTitle" style="margin: 0;">Category</h3>
             <p id="vocabCounter" style="color: #888; margin: 10px 0; font-weight: bold;">Vocab 1</p>
             
             <audio id="player"></audio>
@@ -113,14 +108,13 @@
                     }
                 };
                 audio.addEventListener('timeupdate', stopTrigger);
-            }).catch(err => alert("Click the screen first!"));
+            }).catch(err => alert("Click anywhere on the page first!"));
         }
 
         function handleRead() {
             const item = repoData[currentCat].items[index];
-            const panel = document.getElementById('textPanel');
-            panel.innerText = item.text;
-            panel.classList.remove('hidden');
+            document.getElementById('textPanel').innerText = item.text;
+            document.getElementById('textPanel').classList.remove('hidden');
             document.getElementById('step3').disabled = false;
             audio.currentTime = item.start;
             audio.play();
@@ -128,9 +122,8 @@
 
         function handleAnswer() {
             const item = repoData[currentCat].items[index];
-            const panel = document.getElementById('wordPanel');
-            panel.innerText = item.word;
-            panel.classList.remove('hidden');
+            document.getElementById('wordPanel').innerText = item.word;
+            document.getElementById('wordPanel').classList.remove('hidden');
             document.getElementById('nextBtn').classList.remove('hidden');
         }
 
