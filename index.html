@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Essential English Vocabulary</title>
     <style>
-        /* DARK THEME BASE */
+        /* DARK THEME BASE - Reverted to simple layout */
         body { 
             font-family: 'Segoe UI', sans-serif; 
-            background: #000000; /* Pitch Black Background */
+            background: #111; /* Dark Gray, not pitch black */
             color: #ffffff;
             display: flex; 
             justify-content: center; 
@@ -18,75 +18,62 @@
         }
         
         .app-card { 
-            background: #121212; /* Very Dark Gray Card */
+            background: #222; /* Visible Dark Card */
             padding: 30px; 
             border-radius: 20px; 
-            border: 1px solid #333;
-            box-shadow: 0 0 50px rgba(255, 255, 255, 0.05); 
+            box-shadow: 0 0 20px rgba(0,255,255,0.1); /* Slight glow */
             width: 95%; 
             max-width: 450px; 
             text-align: center; 
-            position: relative;
+            border: 1px solid #444;
         }
 
         .hidden { display: none; }
 
         /* HEADER & FLAGS */
-        .header-box {
-            position: relative;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #333;
-        }
-
         h2 { 
             font-size: 2rem; 
-            margin: 0; 
+            margin-bottom: 10px; 
             color: #fff; 
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             font-weight: 800;
         }
+        
+        .flag-container {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            letter-spacing: 15px; /* Space out the flags */
+        }
 
-        /* 4 CORNER FLAGS */
-        .flag { font-size: 1.5rem; position: absolute; }
-        .f-tl { top: 0; left: 0; }     /* US - Top Left */
-        .f-tr { top: 0; right: 0; }    /* UK - Top Right */
-        .f-bl { bottom: 0; left: 0; }  /* AU - Bottom Left */
-        .f-br { bottom: 0; right: 0; } /* NZ - Bottom Right */
-
-        /* SUB-HEADERS */
-        h3 { font-size: 2.2rem; margin: 10px 0; color: #fff; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        h3 { font-size: 2.5rem; margin: 10px 0; color: #fff; text-transform: uppercase; }
         p#vocabCounter { font-size: 1.2rem; font-weight: bold; color: #888; margin-bottom: 20px; }
 
         /* NEON MENU BUTTONS */
         .btn-menu { 
             width: 100%;
             margin: 15px 0;
-            padding: 25px;
-            background: #000; /* Black button */
-            border: 2px solid; /* Color defined below */
+            padding: 20px;
+            background: #000; 
+            border: 2px solid #555;
             border-radius: 12px;
             text-align: left; 
             display: flex; 
             align-items: center; 
             gap: 20px;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            color: white;
         }
 
-        .menu-icon { font-size: 3rem; line-height: 1; }
-        .menu-text { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .menu-icon { font-size: 2.5rem; }
+        .menu-text { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; }
 
-        /* NEON COLORS */
-        .neon-blue { color: #00ffff; border-color: #00ffff; text-shadow: 0 0 5px #00ffff; box-shadow: 0 0 5px #00ffff inset; }
-        .neon-red { color: #ff0055; border-color: #ff0055; text-shadow: 0 0 5px #ff0055; box-shadow: 0 0 5px #ff0055 inset; }
-        .neon-green { color: #39ff14; border-color: #39ff14; text-shadow: 0 0 5px #39ff14; box-shadow: 0 0 5px #39ff14 inset; }
+        /* NEON COLORS for Menu */
+        .neon-blue { border-color: #00ffff; color: #00ffff; text-shadow: 0 0 8px #00ffff; box-shadow: 0 0 8px #00ffff inset; }
+        .neon-red { border-color: #ff0055; color: #ff0055; text-shadow: 0 0 8px #ff0055; box-shadow: 0 0 8px #ff0055 inset; }
+        .neon-green { border-color: #39ff14; color: #39ff14; text-shadow: 0 0 8px #39ff14; box-shadow: 0 0 8px #39ff14 inset; }
 
-        .btn-menu:hover { transform: scale(1.02); filter: brightness(1.2); }
-
-        /* STUDY BUTTONS (Solid High Contrast) */
+        /* ACTION BUTTONS */
         .btn { 
             width: 100%; margin: 12px 0; padding: 22px; 
             border: none; border-radius: 12px; 
@@ -95,9 +82,9 @@
             letter-spacing: 1px;
         }
         
-        .btn-1 { background: #009933; border: 2px solid #00ff55; } 
-        .btn-2 { background: #0044cc; border: 2px solid #4488ff; } 
-        .btn-3 { background: #cc5500; border: 2px solid #ffaa00; } 
+        .btn-1 { background: #009933; border: 1px solid #00ff00; } 
+        .btn-2 { background: #0044cc; border: 1px solid #0088ff; } 
+        .btn-3 { background: #cc5500; border: 1px solid #ffaa00; } 
         
         .btn-next { 
             background: #000; 
@@ -108,12 +95,12 @@
             display: block; 
             width: 100%; 
             border: 2px solid #FFD700;
-            box-shadow: 0 0 15px #FFD700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
         }
 
-        .btn:disabled { background: #333; color: #555; border: 2px solid #444; cursor: not-allowed; box-shadow: none; }
+        .btn:disabled { background: #333; color: #555; border: 1px solid #444; cursor: not-allowed; box-shadow: none; }
 
-        /* TRANSCRIPT BOX (Red Background, White Text, Big Font) */
+        /* RED TRANSCRIPT BOX (Preserved) */
         .display-box { 
             margin: 25px 0; 
             padding: 25px; 
@@ -125,10 +112,9 @@
             font-weight: 700;    
             line-height: 1.4; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            border: 1px solid #ff6666;
         }
 
-        /* WORD REVEAL (Red Background, White Text, Huge Font) */
+        /* WORD REVEAL (Preserved) */
         .word-reveal { 
             font-size: 3.5rem; 
             color: white; 
@@ -138,23 +124,20 @@
             margin: 20px 0; 
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 0 20px rgba(211, 47, 47, 0.6);
-            border: 2px solid #ff6666;
+            border: 2px solid white;
         }
     </style>
 </head>
 <body>
     <div class="app-card">
         <div id="dashboard">
-            <div class="header-box">
-                <span class="flag f-tl">🇺🇸</span>
-                <span class="flag f-tr">🇬🇧</span>
-                <h2>Essential English Vocabulary</h2>
-                <span class="flag f-bl">🇦🇺</span>
-                <span class="flag f-br">🇳🇿</span>
+            <div class="flag-container">
+                🇺🇸 🇬🇧 🇦🇺 🇳🇿
             </div>
-
-            <div id="menuBtns">
+            
+            <h2>Essential English Vocabulary</h2>
+            
+            <div id="menuBtns" style="margin-top: 30px;">
                 <button class="btn-menu neon-blue" onclick="initSubject('Buildings')">
                     <span class="menu-icon">🏢</span> 
                     <span class="menu-text">Buildings</span>
@@ -192,7 +175,7 @@
     </div>
 
     <script>
-        // DATA: Buildings, Crime, Money
+        // LOGIC UNTOUCHED
         const repoData = {
             "Crime": [
                 { file: "crime 1.m4a", t: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", w: "Pickpocket" },
