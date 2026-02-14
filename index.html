@@ -25,7 +25,6 @@
             <h2>Thematic English</h2>
             <div id="menuBtns">
                 <button class="btn btn-menu" onclick="initSubject('Crime')">⚖️ Group 1: Crime</button>
-                <button class="btn btn-menu" onclick="alert('Please send timestamps for Money first!')" style="opacity: 0.5;">💰 Group 2: Money (Waiting for Data)</button>
             </div>
         </div>
 
@@ -46,7 +45,7 @@
     </div>
 
     <script>
-        // YOUR MANUAL DATA PLUGGED IN HERE
+        // EXACT DATA FROM YOUR TABLE
         const repoData = {
             "Crime": { file: "crime top 8 female.wav", items: [
                 { s: 0, e: 14, t: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", w: "Pickpocket" },
@@ -60,7 +59,8 @@
             ]}
         };
 
-        let currentCat = ""; let index = 0; let stopTime = 0; let checker = null;
+        let currentCat = ""; let index = 0; let stopTime = 0;
+        let timer = null; // The interval ID
         const audio = document.getElementById('player');
 
         function initSubject(cat) {
@@ -74,31 +74,51 @@
 
         function playPart(step) {
             const item = repoData[currentCat].items[index];
+            
+            // CLEAR EVERYTHING
+            if (timer) clearInterval(timer);
+            audio.pause();
+            
+            // Set boundaries
+            const startTime = item.s;
             stopTime = item.e;
             
-            // 1. Clear any previous intervals to prevent "double checking"
-            if (checker) clearInterval(checker);
-            
-            // 2. Pause and Move Needle
-            audio.pause();
-            audio.currentTime = item.s;
-            
+            // Move needle
+            audio.currentTime = startTime;
+
             if (step === 2) {
                 document.getElementById('textPanel').innerText = item.t;
                 document.getElementById('textPanel').classList.remove('hidden');
                 document.getElementById('step3').disabled = false;
             }
 
-            // 3. Play and Start Precise Checker
-            audio.play();
-            checker = setInterval(() => {
-                // If we hit the user's manual end time, KILL IT.
-                if (audio.currentTime >= stopTime) {
-                    audio.pause();
-                    clearInterval(checker);
-                    if (step === 1) document.getElementById('step2').disabled = false;
-                }
-            }, 50); // Checks 20 times per second for precision
+            audio.play().then(() => {
+                // DUAL-LOCK STOP ENGINE
+                // 1. Check 50 times a second
+                timer = setInterval(() => {
+                    if (audio.currentTime >= stopTime) {
+                        forceStop(step);
+                    }
+                }, 20);
+
+                // 2. Backup check using browser events
+                audio.ontimeupdate = () => {
+                    if (audio.currentTime >= stopTime) {
+                        forceStop(step);
+                    }
+                };
+            }).catch(e => console.error(e));
+        }
+
+        function forceStop(step) {
+            audio.pause();
+            if (timer) clearInterval(timer);
+            audio.ontimeupdate = null; // Kill listener
+            
+            // SAFETY: Ensure we didn't drift past the stop time
+            audio.currentTime = stopTime; 
+            
+            if (step === 1) document.getElementById('step2').disabled = false;
         }
 
         function showWord() {
@@ -112,7 +132,7 @@
                 index++;
                 resetUI();
                 audio.pause();
-                if (checker) clearInterval(checker);
+                if (timer) clearInterval(timer);
             } else {
                 alert("Mastered!");
                 location.reload();
