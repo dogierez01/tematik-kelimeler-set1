@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thematic Vocabulary Hub</title>
+    <title>Essential English Vocabulary</title>
     <style>
-        /* BASE STYLES */
+        /* DARK THEME BASE */
         body { 
             font-family: 'Segoe UI', sans-serif; 
-            background: #222; 
+            background: #000000; /* Pitch Black Background */
+            color: #ffffff;
             display: flex; 
             justify-content: center; 
             align-items: center; 
@@ -17,242 +18,72 @@
         }
         
         .app-card { 
-            background: white; 
+            background: #121212; /* Very Dark Gray Card */
             padding: 30px; 
             border-radius: 20px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5); 
+            border: 1px solid #333;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.05); 
             width: 95%; 
             max-width: 450px; 
             text-align: center; 
+            position: relative;
         }
 
         .hidden { display: none; }
 
-        /* HEADER STYLES */
-        h2 { font-size: 2rem; margin-bottom: 20px; color: #333; }
-        h3 { font-size: 2.5rem; margin: 10px 0; color: #000; text-transform: uppercase; }
-        p#vocabCounter { font-size: 1.2rem; font-weight: bold; color: #555; margin-bottom: 20px; }
-
-        /* BUTTONS */
-        .btn { 
-            width: 100%; 
-            margin: 12px 0; 
-            padding: 22px; 
-            border: none; 
-            border-radius: 12px; 
-            font-size: 1.3rem; 
-            font-weight: 900; 
-            cursor: pointer; 
-            color: white; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: transform 0.1s;
+        /* HEADER & FLAGS */
+        .header-box {
+            position: relative;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
         }
-        
-        .btn:active { transform: scale(0.98); }
-        
-        /* MENU BUTTON SPECIFIC STYLES (New Request) */
+
+        h2 { 
+            font-size: 2rem; 
+            margin: 0; 
+            color: #fff; 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        /* 4 CORNER FLAGS */
+        .flag { font-size: 1.5rem; position: absolute; }
+        .f-tl { top: 0; left: 0; }     /* US - Top Left */
+        .f-tr { top: 0; right: 0; }    /* UK - Top Right */
+        .f-bl { bottom: 0; left: 0; }  /* AU - Bottom Left */
+        .f-br { bottom: 0; right: 0; } /* NZ - Bottom Right */
+
+        /* SUB-HEADERS */
+        h3 { font-size: 2.2rem; margin: 10px 0; color: #fff; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        p#vocabCounter { font-size: 1.2rem; font-weight: bold; color: #888; margin-bottom: 20px; }
+
+        /* NEON MENU BUTTONS */
         .btn-menu { 
-            background: #fff; 
-            color: #333; 
-            border: 2px solid #eee; 
+            width: 100%;
+            margin: 15px 0;
+            padding: 25px;
+            background: #000; /* Black button */
+            border: 2px solid; /* Color defined below */
+            border-radius: 12px;
             text-align: left; 
             display: flex; 
             align-items: center; 
-            gap: 20px; /* Space between icon and text */
-        }
-        
-        .btn-menu:hover { background: #f9f9f9; border-color: #ccc; }
-
-        .menu-icon {
-            font-size: 3rem; /* LARGE ICON */
-            line-height: 1;
+            gap: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
 
-        .menu-text {
-            font-size: 1.5rem;
-            font-weight: 800;
-        }
-        
-        .btn-1 { background: #009933; } 
-        .btn-2 { background: #0044cc; } 
-        .btn-3 { background: #cc5500; } 
-        
-        .btn-next { 
-            background: #222; 
-            color: #FFD700; 
-            padding: 30px; 
-            font-size: 1.8rem; 
-            margin-top: 25px; 
-            display: block; 
-            width: 100%; 
-            border: 2px solid #FFD700;
-        }
+        .menu-icon { font-size: 3rem; line-height: 1; }
+        .menu-text { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
 
-        .btn:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; box-shadow: none; }
+        /* NEON COLORS */
+        .neon-blue { color: #00ffff; border-color: #00ffff; text-shadow: 0 0 5px #00ffff; box-shadow: 0 0 5px #00ffff inset; }
+        .neon-red { color: #ff0055; border-color: #ff0055; text-shadow: 0 0 5px #ff0055; box-shadow: 0 0 5px #ff0055 inset; }
+        .neon-green { color: #39ff14; border-color: #39ff14; text-shadow: 0 0 5px #39ff14; box-shadow: 0 0 5px #39ff14 inset; }
 
-        /* TRANSCRIPT BOX (Step 2) */
-        .display-box { 
-            margin: 25px 0; 
-            padding: 25px; 
-            background: #d32f2f; /* Red Background */
-            color: white;        /* White Text */
-            border-radius: 12px; 
-            text-align: left; 
-            font-size: 1.6rem;   /* Bigger Font */
-            font-weight: 700;    /* Bold */
-            line-height: 1.4; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
+        .btn-menu:hover { transform: scale(1.02); filter: brightness(1.2); }
 
-        /* WORD REVEAL (Step 3) */
-        .word-reveal { 
-            font-size: 3.5rem; 
-            color: #333; 
-            font-weight: 900; 
-            text-transform: uppercase; 
-            margin: 20px 0; 
-            padding: 10px;
-            border: 4px solid #333;
-        }
-    </style>
-</head>
-<body>
-    <div class="app-card">
-        <div id="dashboard">
-            <h2>Thematic English</h2>
-            <div id="menuBtns">
-                <button class="btn btn-menu" onclick="initSubject('Buildings')">
-                    <span class="menu-icon">🏢</span> 
-                    <span class="menu-text">Buildings</span>
-                </button>
-
-                <button class="btn btn-menu" onclick="initSubject('Crime')">
-                    <span class="menu-icon">⚖️</span> 
-                    <span class="menu-text">Crime</span>
-                </button>
-                
-                <button class="btn btn-menu" onclick="initSubject('Money')">
-                    <span class="menu-icon">💰</span> 
-                    <span class="menu-text">Money</span>
-                </button>
-            </div>
-        </div>
-
-        <div id="studyView" class="hidden">
-            <button onclick="location.reload()" style="float:left; border:none; background:none; color:#0044cc; font-weight:bold; font-size:1.2rem; cursor:pointer;">← MENU</button>
-            <div style="clear:both;"></div>
-            
-            <h3 id="catTitle"></h3>
-            <p id="vocabCounter">Vocab 1</p>
-            
-            <audio id="player"></audio>
-            
-            <button id="step1" class="btn btn-1" onclick="playAudio(1)">1. Listen</button>
-            <button id="step2" class="btn btn-2" onclick="playAudio(2)" disabled>2. Read & Listen</button>
-            <button id="step3" class="btn btn-3" onclick="showWord()" disabled>3. Show</button>
-
-            <div id="textPanel" class="display-box hidden"></div>
-            <div id="wordPanel" class="word-reveal hidden"></div>
-            <button id="nextBtn" class="btn btn-next hidden" onclick="goNext()">NEXT WORD →</button>
-        </div>
-    </div>
-
-    <script>
-        // DATA: Crime, Money, and Buildings
-        const repoData = {
-            "Crime": [
-                { file: "crime 1.m4a", t: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", w: "Pickpocket" },
-                { file: "crime 2.m4a", t: "This is a criminal who intentionally starts fires to destroy buildings or cars.", w: "Arsonist" },
-                { file: "crime 3.m4a", t: "This is money or a gift that you give to someone (like an official) illegally to get them to do something dishonest for you.", w: "Bribe" },
-                { file: "crime 4.m4a", t: "This is the money that kidnappers demand. You must pay this to get a captured person back safely.", w: "Ransom" },
-                { file: "crime 5.m4a", t: "This is a person who is captured and held prisoner by criminals to force others to pay money.", w: "Hostage" },
-                { file: "crime 6.m4a", t: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", w: "Black market" },
-                { file: "crime 7.m4a", t: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", w: "Blackmail" },
-                { file: "crime 8.m4a", t: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", w: "Loan shark" }
-            ],
-            "Money": [
-                { file: "money 1.m4a", t: "This is money that you must pay to the government to pay for public things like roads and schools.", w: "Tax" },
-                { file: "money 2.m4a", t: "This is the extra money you pay when you borrow money, or the extra money a bank gives you for saving.", w: "Interest" },
-                { file: "money 3.m4a", t: "This is one part of a total payment. You pay smaller amounts every month until the debt is finished.", w: "Installment" },
-                { file: "money 4.m4a", t: "This is the final day or deadline when you must pay a bill or return borrowed money.", w: "Due date" },
-                { file: "money 5.m4a", t: "This is a person or bank that lends money to others and expects to be paid back.", w: "Creditor" },
-                { file: "money 6.m4a", t: "This is a person who promises to pay someone else's debt if that person cannot pay it.", w: "Guarantor" },
-                { file: "money 7.m4a", t: "This is money you give to a landlord before you use their property (deposit). They keep it to make sure you do not break anything.", w: "Caution money" },
-                { file: "money 8.m4a", t: "This is a person who owes money to a bank or another person.", w: "Debtor" }
-            ],
-            "Buildings": [
-                { file: "building 1.m4a", t: "This is a very tall building with many floors, usually seen in big cities.", w: "Skyscraper" },
-                { file: "building 2.m4a", t: "This is the person who owns a house or apartment and rents it to other people for money.", w: "Landlord/Landlady" },
-                { file: "building 3.m4a", t: "This is the system of underground pipes that carries dirty water and waste away from buildings.", w: "Sewer" },
-                { file: "building 4.m4a", t: "This is a person whose job is to help people buy, sell, or rent houses and land.", w: "Real estate agent" },
-                { file: "building 5.m4a", t: "This is a person who pays rent to live in a house or apartment.", w: "Tenant" },
-                { file: "building 6.m4a", t: "This is the device in your kitchen or bathroom that you turn to get water.", w: "Tap" },
-                { file: "building 7.m4a", t: "This is a very large indoor building that has many different stores, restaurants, and cinemas inside.", w: "Mall" },
-                { file: "building 8.m4a", t: "This is a worker whose job is to fit and repair water pipes, toilets, and baths.", w: "Plumber" }
-            ]
-        };
-
-        let currentCat = ""; 
-        let index = 0; 
-        const audio = document.getElementById('player');
-
-        function initSubject(cat) {
-            currentCat = cat; 
-            index = 0;
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('studyView').classList.remove('hidden');
-            document.getElementById('catTitle').innerText = cat;
-            loadTrack(); 
-        }
-
-        function loadTrack() {
-            audio.src = encodeURI(repoData[currentCat][index].file);
-            audio.load();
-            resetUI();
-        }
-
-        function playAudio(step) {
-            const item = repoData[currentCat][index];
-            
-            if (step === 2) {
-                document.getElementById('textPanel').innerText = item.t;
-                document.getElementById('textPanel').classList.remove('hidden');
-                document.getElementById('step3').disabled = false;
-            }
-
-            audio.play().catch(e => alert("Error playing audio: " + e));
-            
-            audio.onended = function() {
-                if (step === 1) document.getElementById('step2').disabled = false;
-            };
-        }
-
-        function showWord() {
-            document.getElementById('wordPanel').innerText = repoData[currentCat][index].w;
-            document.getElementById('wordPanel').classList.remove('hidden');
-            document.getElementById('nextBtn').classList.remove('hidden');
-        }
-
-        function goNext() {
-            if (index < 7) {
-                index++;
-                loadTrack(); 
-            } else {
-                alert("Mastered!");
-                location.reload();
-            }
-        }
-
-        function resetUI() {
-            document.getElementById('vocabCounter').innerText = `Vocab ${index + 1}`;
-            document.getElementById('textPanel').classList.add('hidden');
-            document.getElementById('wordPanel').classList.add('hidden');
-            document.getElementById('nextBtn').classList.add('hidden');
-            document.getElementById('step2').disabled = true;
-            document.getElementById('step3').disabled = true;
-        }
-    </script>
-</body>
-</html>
+        /* STUDY BUTTONS (Solid High Contrast) */
