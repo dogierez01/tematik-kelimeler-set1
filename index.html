@@ -1,71 +1,140 @@
-<script>
-    const repoData = {
-        "Crime": { 
-            file: "crime top 8 female.wav", 
-            items: [
-                { start: 0.2, end: 11.3, text: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", word: "Pickpocket" },
-                { start: 12.2, end: 24.3, text: "This is a criminal who intentionally starts fires to destroy buildings or cars.", word: "Arsonist" },
-                { start: 25.2, end: 39.3, text: "This is money or a gift that you give to someone (like an official) illegally to get them to do something dishonest for you.", word: "Bribe" },
-                { start: 40.2, end: 54.3, text: "This is the money that kidnappers demand. You must pay this to get a captured person back safely.", word: "Ransom" },
-                { start: 55.2, end: 69.3, text: "This is a person who is captured and held prisoner by criminals to force others to pay money.", word: "Hostage" },
-                { start: 70.2, end: 84.3, text: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", word: "Black market" },
-                { start: 85.2, end: 99.3, text: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", word: "Blackmail" },
-                { start: 100.2, end: 114.3, text: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", word: "Loan shark" }
-            ]
-        },
-        "Money": { 
-            file: "money top 8 male.wav", 
-            items: [
-                { start: 0.2, end: 14.3, text: "This is money that you must pay to the government to pay for public things like roads and schools.", word: "Tax" },
-                { start: 15.2, end: 33.3, text: "This is the extra money you pay when you borrow money, or the extra money a bank gives you for saving.", word: "Interest" },
-                { start: 34.2, end: 49.3, text: "This is one part of a total payment. You pay smaller amounts every month until the debt is finished.", word: "Installment" },
-                { start: 50.2, end: 63.3, text: "This is the final day or deadline when you must pay a bill or return borrowed money.", word: "Due date" },
-                { start: 64.2, end: 75.3, text: "This is a person or bank that lends money to others and expects to be paid back.", word: "Creditor" },
-                { start: 76.2, end: 94.3, text: "This is a person who promises to pay someone else's debt if that person cannot pay it.", word: "Guarantor" },
-                { start: 95.2, end: 118.3, text: "This is money you give to a landlord before you use their property (deposit). They keep it to make sure you do not break anything.", word: "Caution money" },
-                { start: 119.2, end: 134.3, text: "This is a person who owes money to a bank or another person.", word: "Debtor" }
-            ]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thematic Vocabulary Hub</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .app-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        .hidden { display: none; }
+        .menu-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .subject-btn { padding: 15px; font-size: 1.1rem; border: 1px solid #ddd; border-radius: 10px; background: #fff; cursor: pointer; text-align: left; }
+        .subject-btn:hover { background: #007bff; color: white; }
+        .step-btn { width: 100%; margin: 10px 0; padding: 15px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; color: white; }
+        .btn-1 { background: #4CAF50; }
+        .btn-2 { background: #2196F3; }
+        .btn-3 { background: #FF9800; }
+        .step-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .display-box { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; min-height: 40px; line-height: 1.4; color: #444; text-align: left; border-left: 4px solid #2196F3; font-style: italic; }
+        .word-reveal { font-size: 2.2rem; color: #d32f2f; font-weight: bold; text-transform: uppercase; margin: 15px 0; }
+        .next-btn { background: #37474f; color: white; width: 100%; padding: 20px; border: none; border-radius: 10px; margin-top: 20px; cursor: pointer; font-size: 1.2rem; font-weight: bold; display: block; }
+    </style>
+</head>
+<body>
+    <div class="app-card">
+        <div id="dashboard">
+            <h2 style="margin-top:0;">Thematic English</h2>
+            <div class="menu-grid">
+                <button class="subject-btn" onclick="initSubject('Crime')">⚖️ Group 1: Crime</button>
+                <button class="subject-btn" onclick="initSubject('Money')">💰 Group 2: Money</button>
+            </div>
+        </div>
+        <div id="studyView" class="hidden">
+            <div style="text-align: left; margin-bottom: 10px;">
+                <a href="#" onclick="exitToMenu()" style="color: #007bff; text-decoration: none; font-size: 0.9rem; font-weight: bold;">← BACK TO MENU</a>
+            </div>
+            <h3 id="catTitle" style="margin: 0; text-transform: uppercase;">Category</h3>
+            <p id="vocabCounter" style="color: #888; margin: 10px 0; font-weight: bold;">Vocab 1</p>
+            <audio id="player"></audio>
+            <button id="step1" class="step-btn btn-1" onclick="handleListen()">1. Listen</button>
+            <button id="step2" class="step-btn btn-2" onclick="handleRead()" disabled>2. Read & Listen</button>
+            <button id="step3" class="step-btn btn-3" onclick="handleAnswer()" disabled>3. Show</button>
+            <div id="textPanel" class="display-box hidden"></div>
+            <div id="wordPanel" class="word-reveal hidden"></div>
+            <button id="nextBtn" class="next-btn hidden" onclick="goNext()">NEXT WORD →</button>
+        </div>
+    </div>
+    <script>
+        const repoData = {
+            "Crime": { 
+                file: "crime top 8 female.wav", 
+                items: [
+                    { start: 0.2, end: 11.3, text: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", word: "Pickpocket" },
+                    { start: 12.2, end: 24.3, text: "This is a criminal who intentionally starts fires to destroy buildings or cars.", word: "Arsonist" },
+                    { start: 25.2, end: 39.3, text: "This is money or a gift that you give to someone (like an official) illegally to get them to do something dishonest for you.", word: "Bribe" },
+                    { start: 40.2, end: 54.3, text: "This is the money that kidnappers demand. You must pay this to get a captured person back safely.", word: "Ransom" },
+                    { start: 55.2, end: 69.3, text: "This is a person who is captured and held prisoner by criminals to force others to pay money.", word: "Hostage" },
+                    { start: 70.2, end: 84.3, text: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", word: "Black market" },
+                    { start: 85.2, end: 99.3, text: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", word: "Blackmail" },
+                    { start: 100.2, end: 114.3, text: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", word: "Loan shark" }
+                ]
+            },
+            "Money": { 
+                file: "money top 8 male.wav", 
+                items: [
+                    { start: 0.2, end: 14.3, text: "This is money that you must pay to the government to pay for public things like roads and schools.", word: "Tax" },
+                    { start: 15.2, end: 33.3, text: "This is the extra money you pay when you borrow money, or the extra money a bank gives you for saving.", word: "Interest" },
+                    { start: 34.2, end: 49.3, text: "This is one part of a total payment. You pay smaller amounts every month until the debt is finished.", word: "Installment" },
+                    { start: 50.2, end: 63.3, text: "This is the final day or deadline when you must pay a bill or return borrowed money.", word: "Due date" },
+                    { start: 64.2, end: 75.3, text: "This is a person or bank that lends money to others and expects to be paid back.", word: "Creditor" },
+                    { start: 76.2, end: 94.3, text: "This is a person who promises to pay someone else's debt if that person cannot pay it.", word: "Guarantor" },
+                    { start: 95.2, end: 118.3, text: "This is money you give to a landlord before you use their property (deposit). They keep it to make sure you do not break anything.", word: "Caution money" },
+                    { start: 119.2, end: 134.3, text: "This is a person who owes money to a bank or another person.", word: "Debtor" }
+                ]
+            }
+        };
+
+        let currentCat = ""; let index = 0; const audio = document.getElementById('player');
+
+        function initSubject(cat) {
+            currentCat = cat; index = 0; audio.src = encodeURI(repoData[cat].file); audio.load();
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('studyView').classList.remove('hidden');
+            document.getElementById('catTitle').innerText = cat; resetUI();
         }
-    };
 
-    let currentCat = "";
-    let index = 0;
-    const audio = document.getElementById('player');
-
-    function handleListen() {
-        const item = repoData[currentCat].items[index];
-        
-        // 1. Hard stop and clear any existing time listeners
-        audio.pause();
-        audio.ontimeupdate = null; 
-
-        // 2. Move needle to the START of the word
-        audio.currentTime = item.start;
-        
-        audio.play().then(() => {
-            // 3. New precise listener
-            const stopTrigger = () => {
-                if (audio.currentTime >= item.end) {
-                    audio.pause();
-                    audio.ontimeupdate = null; // Kill the listener immediately
-                    document.getElementById('step2').disabled = false;
-                }
-            };
-            audio.ontimeupdate = stopTrigger;
-        });
-    }
-
-    function goNext() {
-        if (index < 7) { 
-            index++; 
-            resetUI();
-            // 4. Force reset to PREVENT autoplay of the next word
-            audio.pause();
-            audio.ontimeupdate = null;
-            audio.currentTime = repoData[currentCat].items[index].start;
-        } else { 
-            alert("Category Mastered!"); 
-            exitToMenu(); 
+        function handleListen() {
+            const item = repoData[currentCat].items[index];
+            audio.pause(); audio.currentTime = item.start;
+            audio.play().then(() => {
+                audio.ontimeupdate = () => {
+                    if (audio.currentTime >= item.end) {
+                        audio.pause(); audio.ontimeupdate = null;
+                        document.getElementById('step2').disabled = false;
+                    }
+                };
+            }).catch(() => alert("Click the screen first!"));
         }
-    }
-</script>
+
+        function handleRead() {
+            const item = repoData[currentCat].items[index];
+            document.getElementById('textPanel').innerText = item.text;
+            document.getElementById('textPanel').classList.remove('hidden');
+            document.getElementById('step3').disabled = false;
+            audio.pause(); audio.currentTime = item.start;
+            audio.play().then(() => {
+                audio.ontimeupdate = () => {
+                    if (audio.currentTime >= item.end) { audio.pause(); audio.ontimeupdate = null; }
+                };
+            });
+        }
+
+        function handleAnswer() {
+            const item = repoData[currentCat].items[index];
+            document.getElementById('wordPanel').innerText = item.word;
+            document.getElementById('wordPanel').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+        }
+
+        function goNext() {
+            if (index < 7) { index++; resetUI(); audio.pause(); audio.ontimeupdate = null; }
+            else { alert("Category Mastered!"); exitToMenu(); }
+        }
+
+        function resetUI() {
+            document.getElementById('vocabCounter').innerText = `Vocab ${index + 1}`;
+            document.getElementById('textPanel').classList.add('hidden');
+            document.getElementById('wordPanel').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('step2').disabled = true;
+            document.getElementById('step3').disabled = true;
+        }
+
+        function exitToMenu() {
+            audio.pause(); document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('studyView').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
