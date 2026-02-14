@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thematic Vocabulary Set 1</title>
+    <title>Thematic Vocabulary Hub</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .app-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
@@ -11,14 +11,19 @@
         .menu-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
         .subject-btn { padding: 15px; font-size: 1.1rem; border: 1px solid #ddd; border-radius: 10px; background: #fff; cursor: pointer; text-align: left; }
         .subject-btn:hover { background: #007bff; color: white; }
+        
         .step-btn { width: 100%; margin: 10px 0; padding: 15px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; color: white; }
         .btn-1 { background: #4CAF50; }
         .btn-2 { background: #2196F3; }
         .btn-3 { background: #FF9800; }
         .step-btn:disabled { background: #ccc; cursor: not-allowed; }
-        .display-box { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; min-height: 40px; line-height: 1.4; color: #444; border-left: 4px solid #2196F3; text-align: left; }
+        
+        .display-box { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; min-height: 40px; line-height: 1.4; color: #444; text-align: left; border-left: 4px solid #2196F3; }
         .word-reveal { font-size: 2.2rem; color: #d32f2f; font-weight: bold; text-transform: uppercase; margin: 15px 0; }
-        .next-btn { background: #37474f; color: white; width: 100%; padding: 18px; border: none; border-radius: 8px; margin-top: 15px; cursor: pointer; font-size: 1.1rem; font-weight: bold; }
+        
+        /* The Large Next Button Requirement */
+        .next-btn { background: #37474f; color: white; width: 100%; padding: 20px; border: none; border-radius: 10px; margin-top: 20px; cursor: pointer; font-size: 1.2rem; font-weight: bold; display: block; }
+        .next-btn:hover { background: #263238; }
     </style>
 </head>
 <body>
@@ -44,7 +49,7 @@
             <button id="step2" class="step-btn btn-2" onclick="handleRead()" disabled>2. Read & Listen</button>
             <button id="step3" class="step-btn btn-3" onclick="handleAnswer()" disabled>3. Show</button>
 
-            <div id="textPanel" class="display-box hidden"></div>
+            <div id="textPanel" class="display-box hidden">"></div>
             <div id="wordPanel" class="word-reveal hidden"></div>
 
             <button id="nextBtn" class="next-btn hidden" onclick="goNext()">NEXT WORD →</button>
@@ -99,41 +104,53 @@
         function handleListen() {
             const item = repoData[currentCat].items[index];
             audio.currentTime = item.start;
-            audio.play().then(() => {
-                const stopTrigger = () => {
-                    if (audio.currentTime >= item.end) {
-                        audio.pause();
-                        audio.removeEventListener('timeupdate', stopTrigger);
-                        document.getElementById('step2').disabled = false;
-                    }
-                };
-                audio.addEventListener('timeupdate', stopTrigger);
-            }).catch(err => alert("Interaction required: Click anywhere on the screen first."));
+            audio.play();
+            
+            // Critical Force-Stop Logic
+            const checkStop = () => {
+                if (audio.currentTime >= item.end) {
+                    audio.pause();
+                    audio.removeEventListener('timeupdate', checkStop);
+                    document.getElementById('step2').disabled = false;
+                }
+            };
+            audio.addEventListener('timeupdate', checkStop);
         }
 
         function handleRead() {
             const item = repoData[currentCat].items[index];
             const panel = document.getElementById('textPanel');
-            panel.innerText = item.text; // Exact text used here
+            panel.innerText = item.text; // Exact Text
             panel.classList.remove('hidden');
             document.getElementById('step3').disabled = false;
             audio.currentTime = item.start;
             audio.play();
+            
+            const checkStopRead = () => {
+                if (audio.currentTime >= item.end) {
+                    audio.pause();
+                    audio.removeEventListener('timeupdate', checkStopRead);
+                }
+            };
+            audio.addEventListener('timeupdate', checkStopRead);
         }
 
         function handleAnswer() {
             const item = repoData[currentCat].items[index];
             document.getElementById('wordPanel').innerText = item.word;
             document.getElementById('wordPanel').classList.remove('hidden');
-            document.getElementById('nextBtn').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden'); // Show Next Button
         }
 
         function goNext() {
             if (index < 7) { 
                 index++; 
                 resetUI(); 
+                // Hard reset of the audio to prevent it from starting Word 2 automatically
+                audio.pause();
+                audio.currentTime = repoData[currentCat].items[index].start;
             } else { 
-                alert("Category Complete!"); 
+                alert("Category Mastered!"); 
                 exitToMenu(); 
             }
         }
