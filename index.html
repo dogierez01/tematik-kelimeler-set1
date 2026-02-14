@@ -15,7 +15,7 @@
         .btn-3 { background: #FF9800; }
         .btn-next { background: #37474f; padding: 20px; font-size: 1.2rem; margin-top: 15px; display: block; width: 100%; }
         .btn:disabled { background: #ccc; cursor: not-allowed; }
-        .display-box { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 5px solid #2196F3; text-align: left; font-style: italic; color: #444; }
+        .display-box { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 5px solid #2196F3; text-align: left; font-style: italic; color: #444; font-size: 1rem; line-height: 1.5; }
         .word-reveal { font-size: 2.2rem; color: #d32f2f; font-weight: bold; text-transform: uppercase; margin: 15px 0; }
     </style>
 </head>
@@ -32,10 +32,11 @@
             <button onclick="location.reload()" style="float:left; border:none; background:none; color:blue; cursor:pointer;">← Menu</button>
             <h3 id="catTitle"></h3>
             <p id="vocabCounter" style="font-weight:bold; color:#888;">Vocab 1</p>
+            
             <audio id="player"></audio>
             
-            <button id="step1" class="btn btn-1" onclick="playPart(1)">1. Listen</button>
-            <button id="step2" class="btn btn-2" onclick="playPart(2)" disabled>2. Read & Listen</button>
+            <button id="step1" class="btn btn-1" onclick="playAudio(1)">1. Listen</button>
+            <button id="step2" class="btn btn-2" onclick="playAudio(2)" disabled>2. Read & Listen</button>
             <button id="step3" class="btn btn-3" onclick="showWord()" disabled>3. Show</button>
 
             <div id="textPanel" class="display-box hidden"></div>
@@ -45,84 +46,60 @@
     </div>
 
     <script>
-        // EXACT DATA FROM YOUR TABLE
+        // DATA: EXACT FILENAMES AND EXACT TEXT
         const repoData = {
-            "Crime": { file: "crime top 8 female.wav", items: [
-                { s: 0, e: 14, t: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", w: "Pickpocket" },
-                { s: 14, e: 26, t: "This is a criminal who intentionally starts fires to destroy buildings or cars.", w: "Arsonist" },
-                { s: 26, e: 39, t: "This is money or a gift that you give to someone (like an official) illegally to get them to do something dishonest for you.", w: "Bribe" },
-                { s: 39, e: 50, t: "This is the money that kidnappers demand. You must pay this to get a captured person back safely.", w: "Ransom" },
-                { s: 50, e: 64, t: "This is a person who is captured and held prisoner by criminals to force others to pay money.", w: "Hostage" },
-                { s: 64, e: 76, t: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", w: "Black market" },
-                { s: 76, e: 86, t: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", w: "Blackmail" },
-                { s: 86, e: 100, t: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", w: "Loan shark" }
-            ]}
+            "Crime": [
+                { file: "crime 1.m4a", t: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", w: "Pickpocket" },
+                { file: "crime 2.m4a", t: "This is a criminal who intentionally starts fires to destroy buildings or cars.", w: "Arsonist" },
+                { file: "crime 3.m4a", t: "This is money or a gift that you give to someone (like an official) illegally to get them to do something dishonest for you.", w: "Bribe" },
+                { file: "crime 4.m4a", t: "This is the money that kidnappers demand. You must pay this to get a captured person back safely.", w: "Ransom" },
+                { file: "crime 5.m4a", t: "This is a person who is captured and held prisoner by criminals to force others to pay money.", w: "Hostage" },
+                { file: "crime 6.m4a", t: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", w: "Black market" },
+                { file: "crime 7.m4a", t: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", w: "Blackmail" },
+                { file: "crime 8.m4a", t: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", w: "Loan shark" }
+            ]
         };
 
-        let currentCat = ""; let index = 0; let stopTime = 0;
-        let timer = null; // The interval ID
+        let currentCat = ""; 
+        let index = 0; 
         const audio = document.getElementById('player');
 
         function initSubject(cat) {
-            currentCat = cat; index = 0;
-            audio.src = encodeURI(repoData[cat].file);
+            currentCat = cat; 
+            index = 0;
             document.getElementById('dashboard').classList.add('hidden');
             document.getElementById('studyView').classList.remove('hidden');
             document.getElementById('catTitle').innerText = cat;
+            loadTrack(); 
+        }
+
+        function loadTrack() {
+            // Updated to handle spaces in filenames safely
+            audio.src = encodeURI(repoData[currentCat][index].file);
+            audio.load();
             resetUI();
         }
 
-        function playPart(step) {
-            const item = repoData[currentCat].items[index];
+        function playAudio(step) {
+            const item = repoData[currentCat][index];
             
-            // CLEAR EVERYTHING
-            if (timer) clearInterval(timer);
-            audio.pause();
-            
-            // Set boundaries
-            const startTime = item.s;
-            stopTime = item.e;
-            
-            // Move needle
-            audio.currentTime = startTime;
-
             if (step === 2) {
                 document.getElementById('textPanel').innerText = item.t;
                 document.getElementById('textPanel').classList.remove('hidden');
                 document.getElementById('step3').disabled = false;
             }
 
-            audio.play().then(() => {
-                // DUAL-LOCK STOP ENGINE
-                // 1. Check 50 times a second
-                timer = setInterval(() => {
-                    if (audio.currentTime >= stopTime) {
-                        forceStop(step);
-                    }
-                }, 20);
-
-                // 2. Backup check using browser events
-                audio.ontimeupdate = () => {
-                    if (audio.currentTime >= stopTime) {
-                        forceStop(step);
-                    }
-                };
-            }).catch(e => console.error(e));
-        }
-
-        function forceStop(step) {
-            audio.pause();
-            if (timer) clearInterval(timer);
-            audio.ontimeupdate = null; // Kill listener
+            // Simple Play - No timestamps needed because the file ENDS naturally
+            audio.play().catch(e => alert("Error playing audio: " + e));
             
-            // SAFETY: Ensure we didn't drift past the stop time
-            audio.currentTime = stopTime; 
-            
-            if (step === 1) document.getElementById('step2').disabled = false;
+            // Enable next step when audio naturally finishes
+            audio.onended = function() {
+                if (step === 1) document.getElementById('step2').disabled = false;
+            };
         }
 
         function showWord() {
-            document.getElementById('wordPanel').innerText = repoData[currentCat].items[index].w;
+            document.getElementById('wordPanel').innerText = repoData[currentCat][index].w;
             document.getElementById('wordPanel').classList.remove('hidden');
             document.getElementById('nextBtn').classList.remove('hidden');
         }
@@ -130,9 +107,7 @@
         function goNext() {
             if (index < 7) {
                 index++;
-                resetUI();
-                audio.pause();
-                if (timer) clearInterval(timer);
+                loadTrack(); // Load the next file (e.g., crime 2.m4a)
             } else {
                 alert("Mastered!");
                 location.reload();
