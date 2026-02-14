@@ -8,7 +8,7 @@
         /* BASE STYLES */
         body { 
             font-family: 'Segoe UI', sans-serif; 
-            background: #222; /* Darker background for contrast */
+            background: #222; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
@@ -33,15 +33,15 @@
         h3 { font-size: 2.5rem; margin: 10px 0; color: #000; text-transform: uppercase; }
         p#vocabCounter { font-size: 1.2rem; font-weight: bold; color: #555; margin-bottom: 20px; }
 
-        /* BUTTONS - BIG & BOLD */
+        /* BUTTONS */
         .btn { 
             width: 100%; 
             margin: 12px 0; 
-            padding: 22px; /* Bigger touch area */
+            padding: 22px; 
             border: none; 
             border-radius: 12px; 
-            font-size: 1.3rem; /* Larger text */
-            font-weight: 900; /* Extra Bold */
+            font-size: 1.3rem; 
+            font-weight: 900; 
             cursor: pointer; 
             color: white; 
             text-transform: uppercase;
@@ -53,14 +53,13 @@
         .btn:active { transform: scale(0.98); }
         .btn-menu { background: #fff; color: #333; border: 2px solid #333; text-align: left; }
         
-        /* HIGH CONTRAST COLORS */
-        .btn-1 { background: #009933; } /* Strong Green */
-        .btn-2 { background: #0044cc; } /* Strong Blue */
-        .btn-3 { background: #cc5500; } /* Strong Orange */
+        .btn-1 { background: #009933; } 
+        .btn-2 { background: #0044cc; } 
+        .btn-3 { background: #cc5500; } 
         
         .btn-next { 
             background: #222; 
-            color: #FFD700; /* Gold text on black */
+            color: #FFD700; 
             padding: 30px; 
             font-size: 1.8rem; 
             margin-top: 25px; 
@@ -71,30 +70,29 @@
 
         .btn:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; box-shadow: none; }
 
-        /* TEXT BOXES - BOLD & CLEAR */
+        /* TRANSCRIPT BOX (Step 2) - RED BACKGROUND, WHITE TEXT */
         .display-box { 
             margin: 25px 0; 
-            padding: 20px; 
-            background: #f0f8ff; 
+            padding: 25px; 
+            background: #d32f2f; /* Red Background */
+            color: white;        /* White Text */
             border-radius: 12px; 
-            border-left: 8px solid #0044cc; 
             text-align: left; 
-            color: #111; 
-            font-size: 1.3rem; /* Big reading text */
-            font-weight: 700; /* Bold reading text */
-            line-height: 1.5; 
+            font-size: 1.6rem;   /* Bigger Font */
+            font-weight: 700;    /* Bold */
+            line-height: 1.4; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        /* UPDATED WORD REVEAL STYLE */
+        /* WORD REVEAL (Step 3) */
         .word-reveal { 
-            font-size: 3.8rem; /* Bigger font */
-            color: white; /* White text */
-            background-color: #cc0000; /* Red background */
+            font-size: 3.5rem; 
+            color: #333; 
             font-weight: 900; 
             text-transform: uppercase; 
             margin: 20px 0; 
-            padding: 15px;
-            border-radius: 12px;
+            padding: 10px;
+            border: 4px solid #333;
         }
     </style>
 </head>
@@ -155,7 +153,6 @@
         }
 
         function loadTrack() {
-            // Points to the split file
             audio.src = repoData[currentCat][index].file;
             audio.load();
             resetUI();
@@ -172,7 +169,6 @@
 
             audio.play();
             
-            // Enable next step when audio naturally finishes
             audio.onended = function() {
                 if (step === 1) document.getElementById('step2').disabled = false;
             };
@@ -187,7 +183,7 @@
         function goNext() {
             if (index < 7) {
                 index++;
-                loadTrack(); // Load the next file
+                loadTrack(); 
             } else {
                 alert("Mastered!");
                 location.reload();
