@@ -81,6 +81,7 @@
         function initSubject(cat) {
             currentCat = cat;
             index = 0;
+            // encodeURI handles the spaces in your filenames on GitHub
             audio.src = encodeURI(repoData[cat].file);
             audio.load(); 
             document.getElementById('dashboard').classList.add('hidden');
@@ -101,27 +102,30 @@
                     }
                 };
                 audio.addEventListener('timeupdate', stopTrigger);
-            }).catch(err => alert("Click the screen first!"));
+            }).catch(err => alert("Please click the screen first!"));
         }
 
         function handleRead() {
             const item = repoData[currentCat].items[index];
-            document.getElementById('textPanel').innerText = item.text;
-            document.getElementById('textPanel').classList.remove('hidden');
+            const panel = document.getElementById('textPanel');
+            panel.innerText = item.text;
+            panel.classList.remove('hidden');
             document.getElementById('ansBtn').disabled = false;
             audio.currentTime = item.start;
             audio.play();
         }
 
         function handleAnswer() {
-            document.getElementById('wordPanel').innerText = repoData[currentCat].items[index].word;
-            document.getElementById('wordPanel').classList.remove('hidden');
+            const item = repoData[currentCat].items[index];
+            const panel = document.getElementById('wordPanel');
+            panel.innerText = item.word;
+            panel.classList.remove('hidden');
             document.getElementById('nextBtn').classList.remove('hidden');
         }
 
         function goNext() {
             if (index < 7) { index++; resetUI(); }
-            else { alert("Mastered!"); exitToMenu(); }
+            else { alert("Category Mastered!"); exitToMenu(); }
         }
 
         function resetUI() {
