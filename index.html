@@ -36,7 +36,7 @@
             </div>
             <h3 id="catTitle" style="margin: 0; text-transform: uppercase;">Category</h3>
             <p id="vocabCounter" style="color: #888; margin: 10px 0; font-weight: bold;">Vocab 1</p>
-            <audio id="player"></audio>
+            <audio id="player" preload="auto"></audio>
             <button id="step1" class="step-btn btn-1" onclick="handleListen()">1. Listen</button>
             <button id="step2" class="step-btn btn-2" onclick="handleRead()" disabled>2. Read & Listen</button>
             <button id="step3" class="step-btn btn-3" onclick="handleAnswer()" disabled>3. Show</button>
@@ -50,91 +50,23 @@
             "Crime": { 
                 file: "crime top 8 female.wav", 
                 items: [
-                    { start: 0.2, end: 11.3, text: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", word: "Pickpocket" },
-                    { start: 12.2, end: 24.3, text: "This is a criminal who intentionally starts fires to destroy buildings or cars.", word: "Arsonist" },
-                    { start: 25.2, end: 39.3, text: "This is money or a gift that you give to someone (like an official) illegally to get them to do something dishonest for you.", word: "Bribe" },
-                    { start: 40.2, end: 54.3, text: "This is the money that kidnappers demand. You must pay this to get a captured person back safely.", word: "Ransom" },
-                    { start: 55.2, end: 69.3, text: "This is a person who is captured and held prisoner by criminals to force others to pay money.", word: "Hostage" },
-                    { start: 70.2, end: 84.3, text: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", word: "Black market" },
-                    { start: 85.2, end: 99.3, text: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", word: "Blackmail" },
-                    { start: 100.2, end: 114.3, text: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", word: "Loan shark" }
+                    { start: 0.2, end: 11.2, text: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", word: "Pickpocket" },
+                    { start: 12.2, end: 24.2, text: "This is a criminal who intentionally starts fires to destroy buildings or cars.", word: "Arsonist" },
+                    { start: 25.2, end: 39.2, text: "This is money or a gift that you give to someone (like an official) illegally to get them to do something dishonest for you.", word: "Bribe" },
+                    { start: 40.2, end: 54.2, text: "This is the money that kidnappers demand. You must pay this to get a captured person back safely.", word: "Ransom" },
+                    { start: 55.2, end: 69.2, text: "This is a person who is captured and held prisoner by criminals to force others to pay money.", word: "Hostage" },
+                    { start: 70.2, end: 84.2, text: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", word: "Black market" },
+                    { start: 85.2, end: 99.2, text: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", word: "Blackmail" },
+                    { start: 100.2, end: 114.2, text: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", word: "Loan shark" }
                 ]
             },
             "Money": { 
                 file: "money top 8 male.wav", 
                 items: [
-                    { start: 0.2, end: 14.3, text: "This is money that you must pay to the government to pay for public things like roads and schools.", word: "Tax" },
-                    { start: 15.2, end: 33.3, text: "This is the extra money you pay when you borrow money, or the extra money a bank gives you for saving.", word: "Interest" },
-                    { start: 34.2, end: 49.3, text: "This is one part of a total payment. You pay smaller amounts every month until the debt is finished.", word: "Installment" },
-                    { start: 50.2, end: 63.3, text: "This is the final day or deadline when you must pay a bill or return borrowed money.", word: "Due date" },
-                    { start: 64.2, end: 75.3, text: "This is a person or bank that lends money to others and expects to be paid back.", word: "Creditor" },
-                    { start: 76.2, end: 94.3, text: "This is a person who promises to pay someone else's debt if that person cannot pay it.", word: "Guarantor" },
-                    { start: 95.2, end: 118.3, text: "This is money you give to a landlord before you use their property (deposit). They keep it to make sure you do not break anything.", word: "Caution money" },
-                    { start: 119.2, end: 134.3, text: "This is a person who owes money to a bank or another person.", word: "Debtor" }
-                ]
-            }
-        };
-
-        let currentCat = ""; let index = 0; const audio = document.getElementById('player');
-
-        function initSubject(cat) {
-            currentCat = cat; index = 0; audio.src = encodeURI(repoData[cat].file); audio.load();
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('studyView').classList.remove('hidden');
-            document.getElementById('catTitle').innerText = cat; resetUI();
-        }
-
-        function handleListen() {
-            const item = repoData[currentCat].items[index];
-            audio.pause(); audio.currentTime = item.start;
-            audio.play().then(() => {
-                audio.ontimeupdate = () => {
-                    if (audio.currentTime >= item.end) {
-                        audio.pause(); audio.ontimeupdate = null;
-                        document.getElementById('step2').disabled = false;
-                    }
-                };
-            }).catch(() => alert("Click the screen first!"));
-        }
-
-        function handleRead() {
-            const item = repoData[currentCat].items[index];
-            document.getElementById('textPanel').innerText = item.text;
-            document.getElementById('textPanel').classList.remove('hidden');
-            document.getElementById('step3').disabled = false;
-            audio.pause(); audio.currentTime = item.start;
-            audio.play().then(() => {
-                audio.ontimeupdate = () => {
-                    if (audio.currentTime >= item.end) { audio.pause(); audio.ontimeupdate = null; }
-                };
-            });
-        }
-
-        function handleAnswer() {
-            const item = repoData[currentCat].items[index];
-            document.getElementById('wordPanel').innerText = item.word;
-            document.getElementById('wordPanel').classList.remove('hidden');
-            document.getElementById('nextBtn').classList.remove('hidden');
-        }
-
-        function goNext() {
-            if (index < 7) { index++; resetUI(); audio.pause(); audio.ontimeupdate = null; }
-            else { alert("Category Mastered!"); exitToMenu(); }
-        }
-
-        function resetUI() {
-            document.getElementById('vocabCounter').innerText = `Vocab ${index + 1}`;
-            document.getElementById('textPanel').classList.add('hidden');
-            document.getElementById('wordPanel').classList.add('hidden');
-            document.getElementById('nextBtn').classList.add('hidden');
-            document.getElementById('step2').disabled = true;
-            document.getElementById('step3').disabled = true;
-        }
-
-        function exitToMenu() {
-            audio.pause(); document.getElementById('dashboard').classList.remove('hidden');
-            document.getElementById('studyView').classList.add('hidden');
-        }
-    </script>
-</body>
-</html>
+                    { start: 0.2, end: 14.2, text: "This is money that you must pay to the government to pay for public things like roads and schools.", word: "Tax" },
+                    { start: 15.2, end: 33.2, text: "This is the extra money you pay when you borrow money, or the extra money a bank gives you for saving.", word: "Interest" },
+                    { start: 34.2, end: 49.2, text: "This is one part of a total payment. You pay smaller amounts every month until the debt is finished.", word: "Installment" },
+                    { start: 50.2, end: 63.2, text: "This is the final day or deadline when you must pay a bill or return borrowed money.", word: "Due date" },
+                    { start: 64.2, end: 75.2, text: "This is a person or bank that lends money to others and expects to be paid back.", word: "Creditor" },
+                    { start: 76.2, end: 94.2, text: "This is a person who promises to pay someone else's debt if that person cannot pay it.", word: "Guarantor" },
+                    { start: 95.2, end: 118.2, text: "This is money you
