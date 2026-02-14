@@ -51,7 +51,29 @@
         }
         
         .btn:active { transform: scale(0.98); }
-        .btn-menu { background: #fff; color: #333; border: 2px solid #333; text-align: left; }
+        
+        /* MENU BUTTON SPECIFIC STYLES (New Request) */
+        .btn-menu { 
+            background: #fff; 
+            color: #333; 
+            border: 2px solid #eee; 
+            text-align: left; 
+            display: flex; 
+            align-items: center; 
+            gap: 20px; /* Space between icon and text */
+        }
+        
+        .btn-menu:hover { background: #f9f9f9; border-color: #ccc; }
+
+        .menu-icon {
+            font-size: 3rem; /* LARGE ICON */
+            line-height: 1;
+        }
+
+        .menu-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
         
         .btn-1 { background: #009933; } 
         .btn-2 { background: #0044cc; } 
@@ -101,9 +123,20 @@
         <div id="dashboard">
             <h2>Thematic English</h2>
             <div id="menuBtns">
-                <button class="btn btn-menu" onclick="initSubject('Crime')">⚖️ Group 1: Crime</button>
-                <button class="btn btn-menu" onclick="initSubject('Money')">💰 Group 2: Money</button>
-                <button class="btn btn-menu" onclick="initSubject('Buildings')">🏢 Group 3: Buildings</button>
+                <button class="btn btn-menu" onclick="initSubject('Buildings')">
+                    <span class="menu-icon">🏢</span> 
+                    <span class="menu-text">Buildings</span>
+                </button>
+
+                <button class="btn btn-menu" onclick="initSubject('Crime')">
+                    <span class="menu-icon">⚖️</span> 
+                    <span class="menu-text">Crime</span>
+                </button>
+                
+                <button class="btn btn-menu" onclick="initSubject('Money')">
+                    <span class="menu-icon">💰</span> 
+                    <span class="menu-text">Money</span>
+                </button>
             </div>
         </div>
 
