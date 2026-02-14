@@ -1,115 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thematic Vocabulary Hub</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
-        .app-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center; }
-        .hidden { display: none; }
-        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 20px; }
-        .subject-btn { padding: 15px; font-size: 1.1rem; border: 1px solid #ddd; border-radius: 10px; background: #fff; cursor: pointer; transition: 0.2s; text-align: left; }
-        .subject-btn:hover { background: #007bff; color: white; border-color: #007bff; }
-        .step-btn { width: 100%; margin: 8px 0; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .btn-listen { background: #4CAF50; color: white; }
-        .btn-read { background: #2196F3; color: white; }
-        .btn-answer { background: #FF9800; color: white; }
-        .display-box { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; min-height: 60px; line-height: 1.5; font-style: italic; }
-        .word-reveal { font-size: 1.8rem; color: #d32f2f; font-weight: bold; text-transform: uppercase; }
-        .nav-btn { background: #607d8b; color: white; width: 100%; padding: 12px; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer; }
-    </style>
-</head>
-<body>
+const repoData = {
+        "Crime": { file: "crime top 8 male.wav", items: [
+            { start: 0, end: 12, text: "A person who steals wallets or phones from people's pockets quietly.", word: "Pickpocket" },
+            { start: 12, end: 25, text: "A criminal who intentionally starts fires to destroy buildings.", word: "Arsonist" },
+            { start: 25, end: 40, text: "Money or a gift given illegally to get someone to do something dishonest.", word: "Bribe" },
+            { start: 40, end: 55, text: "The money that kidnappers demand to return a captured person safely.", word: "Ransom" },
+            { start: 55, end: 70, text: "A person held prisoner by criminals to force others to pay money.", word: "Hostage" },
+            { start: 70, end: 85, text: "An illegal system or place where banned things are bought and sold.", word: "Black market" },
+            { start: 85, end: 100, text: "A crime where someone threatens to tell secrets unless you pay.", word: "Blackmail" },
+            { start: 100, end: 115, text: "A person who lends money with very high interest and threats.", word: "Loan shark" }
+        ]},
+        "Money": { file: "money top 8 male.wav", items: [
+            { start: 0, end: 15, text: "Money you must pay to the government for public services.", word: "Tax" },
+            { start: 15, end: 34, text: "Extra money paid for borrowing, or earned from saving.", word: "Interest" },
+            { start: 34, end: 50, text: "One part of a total payment made monthly.", word: "Installment" },
+            { start: 50, end: 64, text: "The final day or deadline to pay a bill or debt.", word: "Due date" },
+            { start: 64, end: 76, text: "A person or bank that lends money and expects it back.", word: "Creditor" },
+            { start: 76, end: 95, text: "A person who promises to pay a debt if the borrower cannot.", word: "Guarantor" },
+            { start: 95, end: 119, text: "A deposit given to a landlord before using their property.", word: "Caution money" },
+            { start: 119, end: 135, text: "A person who owes money to a bank or another person.", word: "Debtor" }
+        ]}
+    };
 
-    <div class="app-card">
-        <div id="dashboard">
-            <h2>Thematic English</h2>
-            <div class="menu-grid">
-                <button class="subject-btn" onclick="initSubject('Crime')">⚖️ Group 1: Crime</button>
-                <button class="subject-btn" onclick="initSubject('Money')">💰 Group 2: Money</button>
-                <button class="subject-btn" onclick="initSubject('Food')">🍎 Group 3: Food</button>
-                <button class="subject-btn" onclick="initSubject('Law')">📜 Group 4: Law</button>
-                <div style="padding: 10px; color: #999;">Other 6 groups being mapped...</div>
-            </div>
-        </div>
+    let currentCat = "";
+    let index = 0;
+    const audio = document.getElementById('player');
 
-        <div id="studyView" class="hidden">
-            <button onclick="exitToMenu()" style="float: left; background: none; border: none; color: #007bff; cursor: pointer;">← Menu</button>
-            <h3 id="catTitle">Category</h3>
-            <p id="progress">Word 1 / 8</p>
-            <audio id="player"></audio>
-            <button class="step-btn btn-listen" onclick="handleListen()">1. Listen to Definition</button>
-            <button id="readBtn" class="step-btn btn-read" onclick="handleRead()" disabled>2. Read & Listen Again</button>
-            <button id="ansBtn" class="step-btn btn-answer" onclick="handleAnswer()" disabled>3. Show the Word</button>
-            <div id="textPanel" class="display-box hidden"></div>
-            <div id="wordPanel" class="word-reveal hidden"></div>
-            <button id="nextBtn" class="nav-btn hidden" onclick="goNext()">Next Word →</button>
-        </div>
-    </div>
+    // DEBUG: Alert if the file name is wrong
+    audio.onerror = function() {
+        alert("CRITICAL ERROR: Browser cannot find the file: " + decodeURI(audio.src));
+    };
 
-    <script>
-        const repoData = {
-            "Crime": { file: "crime top 8 male.wav", items: [
-                { start: 0, end: 12, text: "A person who steals wallets or phones from people's pockets quietly.", word: "Pickpocket" },
-                { start: 12, end: 25, text: "A criminal who intentionally starts fires to destroy buildings.", word: "Arsonist" },
-                { start: 25, end: 40, text: "Money or a gift given illegally to get someone to do something dishonest.", word: "Bribe" },
-                { start: 40, end: 55, text: "The money that kidnappers demand to return a captured person safely.", word: "Ransom" },
-                { start: 55, end: 70, text: "A person held prisoner by criminals to force others to pay money.", word: "Hostage" },
-                { start: 70, end: 85, text: "An illegal system or place where banned things are bought and sold.", word: "Black market" },
-                { start: 85, end: 100, text: "A crime where someone threatens to tell secrets unless you pay.", word: "Blackmail" },
-                { start: 100, end: 115, text: "A person who lends money with very high interest and threats.", word: "Loan shark" }
-            ]},
-            "Money": { file: "money top 8 male.wav", items: [
-                { start: 0, end: 15, text: "Money you must pay to the government for public services.", word: "Tax" },
-                { start: 15, end: 34, text: "Extra money paid for borrowing, or earned from saving.", word: "Interest" },
-                { start: 34, end: 50, text: "One part of a total payment made monthly.", word: "Installment" },
-                { start: 50, end: 64, text: "The final day or deadline to pay a bill or debt.", word: "Due date" },
-                { start: 64, end: 76, text: "A person or bank that lends money and expects it back.", word: "Creditor" },
-                { start: 76, end: 95, text: "A person who promises to pay a debt if the borrower cannot.", word: "Guarantor" },
-                { start: 95, end: 119, text: "A deposit given to a landlord before using their property.", word: "Caution money" },
-                { start: 119, end: 135, text: "A person who owes money to a bank or another person.", word: "Debtor" }
-            ]},
-            "Food": { file: "food top 8 male.wav", items: [
-                { start: 0, end: 15, text: "The action of moving food from your mouth down your throat.", word: "Swallow" },
-                { start: 15, end: 30, text: "A shop or person that mainly sells fresh fruit and vegetables.", word: "Greengrocer" },
-                { start: 30, end: 45, text: "Food that has not been cooked.", word: "Raw" },
-                { start: 45, end: 60, text: "A place where bread, cakes, and cookies are made or sold.", word: "Bakery" },
-                { start: 60, end: 75, text: "Category of food made from milk like cheese and yogurt.", word: "Dairy" },
-                { start: 75, end: 90, text: "A shop selling special prepared meats and expensive cheeses.", word: "Deli" },
-                { start: 90, end: 105, text: "A person whose job is to cut and sell meat.", word: "Butcher" },
-                { start: 105, end: 120, text: "The action of drinking a very small amount of liquid at a time.", word: "Sip" }
-            ]},
-            "Law": { file: "law top 8 male.wav", items: [
-                { start: 0, end: 15, text: "A person who sees a crime or accident and tells the court.", word: "Witness" },
-                { start: 15, end: 30, text: "Money you receive because you were hurt or lost something.", word: "Compensation" },
-                { start: 30, end: 45, text: "Legal decision about which parent a child will live with.", word: "Child custody" },
-                { start: 45, end: 60, text: "The person who starts a civil case in court.", word: "Plaintiff" },
-                { start: 60, end: 75, text: "A formal written document asking a court for specific action.", word: "Petition" },
-                { start: 75, end: 90, text: "Money paid so an accused person can stay out of jail before trial.", word: "Bail" },
-                { start: 90, end: 105, text: "Money one divorced parent pays specifically for a child.", word: "Child alimony" },
-                { start: 105, end: 120, text: "The person in court accused of a crime or doing wrong.", word: "Defendant" }
-            ]}
-        };
+    function initSubject(cat) {
+        currentCat = cat;
+        index = 0;
+        
+        // Encode the URL to handle the spaces in your file names properly
+        const fileName = repoData[cat].file;
+        audio.src = encodeURI(fileName);
+        audio.load(); 
 
-        let currentCat = "";
-        let index = 0;
-        const audio = document.getElementById('player');
+        document.getElementById('dashboard').classList.add('hidden');
+        document.getElementById('studyView').classList.remove('hidden');
+        document.getElementById('catTitle').innerText = cat;
+        
+        // Reset everything
+        resetUI();
+        
+        console.log("Loading subject: " + cat + " with file: " + fileName);
+    }
 
-        function initSubject(cat) {
-            currentCat = cat;
-            index = 0;
-            audio.src = repoData[cat].file;
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('studyView').classList.remove('hidden');
-            document.getElementById('catTitle').innerText = cat;
-            resetUI();
-        }
-
-        function handleListen() {
-            const item = repoData[currentCat].items[index];
-            audio.currentTime = item.start;
-            audio.play();
+    function handleListen() {
+        const item = repoData[currentCat].items[index];
+        audio.currentTime = item.start;
+        
+        // Attempt to play
+        audio.play().then(() => {
+            console.log("Playing from: " + item.start);
             const stopTrigger = () => {
                 if (audio.currentTime >= item.end) {
                     audio.pause();
@@ -118,42 +64,49 @@
                 }
             };
             audio.addEventListener('timeupdate', stopTrigger);
-        }
+        }).catch(err => {
+            alert("Audio play blocked. Please click anywhere on the page first, then try again.");
+            console.error(err);
+        });
+    }
 
-        function handleRead() {
-            const item = repoData[currentCat].items[index];
-            document.getElementById('textPanel').innerText = item.text;
-            document.getElementById('textPanel').classList.remove('hidden');
-            document.getElementById('ansBtn').disabled = false;
-            audio.currentTime = item.start;
-            audio.play();
-        }
+    function handleRead() {
+        const item = repoData[currentCat].items[index];
+        document.getElementById('textPanel').innerText = item.text;
+        document.getElementById('textPanel').classList.remove('hidden');
+        document.getElementById('ansBtn').disabled = false;
+        
+        audio.currentTime = item.start;
+        audio.play();
+    }
 
-        function handleAnswer() {
-            document.getElementById('wordPanel').innerText = repoData[currentCat].items[index].word;
-            document.getElementById('wordPanel').classList.remove('hidden');
-            document.getElementById('nextBtn').classList.remove('hidden');
-        }
+    function handleAnswer() {
+        document.getElementById('wordPanel').innerText = repoData[currentCat].items[index].word;
+        document.getElementById('wordPanel').classList.remove('hidden');
+        document.getElementById('nextBtn').classList.remove('hidden');
+    }
 
-        function goNext() {
-            if (index < 7) { index++; resetUI(); }
-            else { alert("Mastered!"); exitToMenu(); }
+    function goNext() {
+        if (index < 7) { 
+            index++; 
+            resetUI(); 
+        } else { 
+            alert("Mastered!"); 
+            exitToMenu(); 
         }
+    }
 
-        function resetUI() {
-            document.getElementById('progress').innerText = `Word ${index + 1} / 8`;
-            document.getElementById('textPanel').classList.add('hidden');
-            document.getElementById('wordPanel').classList.add('hidden');
-            document.getElementById('nextBtn').classList.add('hidden');
-            document.getElementById('readBtn').disabled = true;
-            document.getElementById('ansBtn').disabled = true;
-        }
+    function resetUI() {
+        document.getElementById('progress').innerText = `Word ${index + 1} / 8`;
+        document.getElementById('textPanel').classList.add('hidden');
+        document.getElementById('wordPanel').classList.add('hidden');
+        document.getElementById('nextBtn').classList.add('hidden');
+        document.getElementById('readBtn').disabled = true;
+        document.getElementById('ansBtn').disabled = true;
+    }
 
-        function exitToMenu() {
-            audio.pause();
-            document.getElementById('dashboard').classList.remove('hidden');
-            document.getElementById('studyView').classList.add('hidden');
-        }
-    </script>
-</body>
-</html>
+    function exitToMenu() {
+        audio.pause();
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('studyView').classList.add('hidden');
+    }
