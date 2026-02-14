@@ -70,7 +70,7 @@
 
         .btn:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; box-shadow: none; }
 
-        /* TRANSCRIPT BOX (Step 2) - RED BACKGROUND, WHITE TEXT */
+        /* TRANSCRIPT BOX (Step 2) */
         .display-box { 
             margin: 25px 0; 
             padding: 25px; 
@@ -103,6 +103,7 @@
             <div id="menuBtns">
                 <button class="btn btn-menu" onclick="initSubject('Crime')">⚖️ Group 1: Crime</button>
                 <button class="btn btn-menu" onclick="initSubject('Money')">💰 Group 2: Money</button>
+                <button class="btn btn-menu" onclick="initSubject('Buildings')">🏢 Group 3: Buildings</button>
             </div>
         </div>
 
@@ -126,7 +127,7 @@
     </div>
 
     <script>
-        // DATA: I ADDED MONEY HERE FOR YOU
+        // DATA: Crime, Money, and Buildings
         const repoData = {
             "Crime": [
                 { file: "crime 1.m4a", t: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", w: "Pickpocket" },
@@ -147,6 +148,16 @@
                 { file: "money 6.m4a", t: "This is a person who promises to pay someone else's debt if that person cannot pay it.", w: "Guarantor" },
                 { file: "money 7.m4a", t: "This is money you give to a landlord before you use their property (deposit). They keep it to make sure you do not break anything.", w: "Caution money" },
                 { file: "money 8.m4a", t: "This is a person who owes money to a bank or another person.", w: "Debtor" }
+            ],
+            "Buildings": [
+                { file: "building 1.m4a", t: "This is a very tall building with many floors, usually seen in big cities.", w: "Skyscraper" },
+                { file: "building 2.m4a", t: "This is the person who owns a house or apartment and rents it to other people for money.", w: "Landlord/Landlady" },
+                { file: "building 3.m4a", t: "This is the system of underground pipes that carries dirty water and waste away from buildings.", w: "Sewer" },
+                { file: "building 4.m4a", t: "This is a person whose job is to help people buy, sell, or rent houses and land.", w: "Real estate agent" },
+                { file: "building 5.m4a", t: "This is a person who pays rent to live in a house or apartment.", w: "Tenant" },
+                { file: "building 6.m4a", t: "This is the device in your kitchen or bathroom that you turn to get water.", w: "Tap" },
+                { file: "building 7.m4a", t: "This is a very large indoor building that has many different stores, restaurants, and cinemas inside.", w: "Mall" },
+                { file: "building 8.m4a", t: "This is a worker whose job is to fit and repair water pipes, toilets, and baths.", w: "Plumber" }
             ]
         };
 
@@ -164,7 +175,7 @@
         }
 
         function loadTrack() {
-            audio.src = repoData[currentCat][index].file;
+            audio.src = encodeURI(repoData[currentCat][index].file);
             audio.load();
             resetUI();
         }
@@ -178,7 +189,7 @@
                 document.getElementById('step3').disabled = false;
             }
 
-            audio.play();
+            audio.play().catch(e => alert("Error playing audio: " + e));
             
             audio.onended = function() {
                 if (step === 1) document.getElementById('step2').disabled = false;
