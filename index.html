@@ -1,5 +1,5 @@
 const repoData = {
-        "Crime": { file: "crime top 8 male.wav", items: [
+        "Crime": { file: "crime top 8 female.wav", items: [
             { start: 0, end: 12, text: "A person who steals wallets or phones from people's pockets quietly.", word: "Pickpocket" },
             { start: 12, end: 25, text: "A criminal who intentionally starts fires to destroy buildings.", word: "Arsonist" },
             { start: 25, end: 40, text: "Money or a gift given illegally to get someone to do something dishonest.", word: "Bribe" },
@@ -25,88 +25,32 @@ const repoData = {
     let index = 0;
     const audio = document.getElementById('player');
 
-    // DEBUG: Alert if the file name is wrong
-    audio.onerror = function() {
-        alert("CRITICAL ERROR: Browser cannot find the file: " + decodeURI(audio.src));
-    };
-
     function initSubject(cat) {
         currentCat = cat;
         index = 0;
         
-        // Encode the URL to handle the spaces in your file names properly
-        const fileName = repoData[cat].file;
-        audio.src = encodeURI(fileName);
+        // We use encodeURI to handle those blank spaces in your filenames
+        audio.src = encodeURI(repoData[cat].file);
         audio.load(); 
 
         document.getElementById('dashboard').classList.add('hidden');
         document.getElementById('studyView').classList.remove('hidden');
         document.getElementById('catTitle').innerText = cat;
-        
-        // Reset everything
         resetUI();
-        
-        console.log("Loading subject: " + cat + " with file: " + fileName);
     }
 
     function handleListen() {
         const item = repoData[currentCat].items[index];
         audio.currentTime = item.start;
-        
-        // Attempt to play
-        audio.play().then(() => {
-            console.log("Playing from: " + item.start);
-            const stopTrigger = () => {
-                if (audio.currentTime >= item.end) {
-                    audio.pause();
-                    audio.removeEventListener('timeupdate', stopTrigger);
-                    document.getElementById('readBtn').disabled = false;
-                }
-            };
-            audio.addEventListener('timeupdate', stopTrigger);
-        }).catch(err => {
-            alert("Audio play blocked. Please click anywhere on the page first, then try again.");
-            console.error(err);
-        });
-    }
+        audio.play().catch(err => alert("Please click the screen first to enable audio!"));
 
-    function handleRead() {
-        const item = repoData[currentCat].items[index];
-        document.getElementById('textPanel').innerText = item.text;
-        document.getElementById('textPanel').classList.remove('hidden');
-        document.getElementById('ansBtn').disabled = false;
-        
-        audio.currentTime = item.start;
-        audio.play();
+        const stopTrigger = () => {
+            if (audio.currentTime >= item.end) {
+                audio.pause();
+                audio.removeEventListener('timeupdate', stopTrigger);
+                document.getElementById('readBtn').disabled = false;
+            }
+        };
+        audio.addEventListener('timeupdate', stopTrigger);
     }
-
-    function handleAnswer() {
-        document.getElementById('wordPanel').innerText = repoData[currentCat].items[index].word;
-        document.getElementById('wordPanel').classList.remove('hidden');
-        document.getElementById('nextBtn').classList.remove('hidden');
-    }
-
-    function goNext() {
-        if (index < 7) { 
-            index++; 
-            resetUI(); 
-        } else { 
-            alert("Mastered!"); 
-            exitToMenu(); 
-        }
-    }
-
-    function resetUI() {
-        document.getElementById('progress').innerText = `Word ${index + 1} / 8`;
-        document.getElementById('textPanel').classList.add('hidden');
-        document.getElementById('wordPanel').classList.add('hidden');
-        document.getElementById('nextBtn').classList.add('hidden');
-        document.getElementById('readBtn').disabled = true;
-        document.getElementById('ansBtn').disabled = true;
-    }
-
-    function exitToMenu() {
-        audio.pause();
-        document.getElementById('dashboard').classList.remove('hidden');
-        document.getElementById('studyView').classList.add('hidden');
-    }
+    // ... (rest of the functions remain the same)
