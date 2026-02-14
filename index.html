@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thematic Vocabulary Hub</title>
+    <title>Thematic Vocabulary Set 1</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .app-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
@@ -16,7 +16,7 @@
         .btn-2 { background: #2196F3; }
         .btn-3 { background: #FF9800; }
         .step-btn:disabled { background: #ccc; cursor: not-allowed; }
-        .display-box { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; min-height: 40px; line-height: 1.4; color: #444; font-style: italic; }
+        .display-box { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; min-height: 40px; line-height: 1.4; color: #444; border-left: 4px solid #2196F3; text-align: left; }
         .word-reveal { font-size: 2.2rem; color: #d32f2f; font-weight: bold; text-transform: uppercase; margin: 15px 0; }
         .next-btn { background: #37474f; color: white; width: 100%; padding: 18px; border: none; border-radius: 8px; margin-top: 15px; cursor: pointer; font-size: 1.1rem; font-weight: bold; }
     </style>
@@ -33,9 +33,9 @@
 
         <div id="studyView" class="hidden">
             <div style="text-align: left; margin-bottom: 10px;">
-                <a href="#" onclick="exitToMenu()" style="color: #007bff; text-decoration: none; font-size: 0.9rem; font-weight: bold;">← MENU</a>
+                <a href="#" onclick="exitToMenu()" style="color: #007bff; text-decoration: none; font-size: 0.9rem; font-weight: bold;">← BACK TO MENU</a>
             </div>
-            <h3 id="catTitle" style="margin: 0;">Category</h3>
+            <h3 id="catTitle" style="margin: 0; text-transform: uppercase;">Category</h3>
             <p id="vocabCounter" style="color: #888; margin: 10px 0; font-weight: bold;">Vocab 1</p>
             
             <audio id="player"></audio>
@@ -56,27 +56,27 @@
             "Crime": { 
                 file: "crime top 8 female.wav", 
                 items: [
-                    { start: 0, end: 11.5, text: "A person who steals wallets or phones from people's pockets quietly.", word: "Pickpocket" },
-                    { start: 12, end: 24.5, text: "A criminal who intentionally starts fires to destroy buildings.", word: "Arsonist" },
-                    { start: 25, end: 39.5, text: "Money or a gift given illegally to get someone to do something dishonest.", word: "Bribe" },
-                    { start: 40, end: 54.5, text: "The money that kidnappers demand to return a captured person safely.", word: "Ransom" },
-                    { start: 55, end: 69.5, text: "A person held prisoner by criminals to force others to pay money.", word: "Hostage" },
-                    { start: 70, end: 84.5, text: "An illegal system or place where banned things are bought and sold.", word: "Black market" },
-                    { start: 85, end: 99.5, text: "A crime where someone threatens to tell secrets unless you pay.", word: "Blackmail" },
-                    { start: 100, end: 114.5, text: "A person who lends money with very high interest and threats.", word: "Loan shark" }
+                    { start: 0, end: 11.5, text: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", word: "Pickpocket" },
+                    { start: 12, end: 24.5, text: "This is a criminal who intentionally starts fires to destroy buildings or cars.", word: "Arsonist" },
+                    { start: 25, end: 39.5, text: "This is money or a gift that you give to someone (like an official) illegally to get them to do something dishonest for you.", word: "Bribe" },
+                    { start: 40, end: 54.5, text: "This is the money that kidnappers demand. You must pay this to get a captured person back safely.", word: "Ransom" },
+                    { start: 55, end: 69.5, text: "This is a person who is captured and held prisoner by criminals to force others to pay money.", word: "Hostage" },
+                    { start: 70, end: 84.5, text: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", word: "Black market" },
+                    { start: 85, end: 99.5, text: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", word: "Blackmail" },
+                    { start: 100, end: 114.5, text: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", word: "Loan shark" }
                 ]
             },
             "Money": { 
                 file: "money top 8 male.wav", 
                 items: [
-                    { start: 0, end: 14.5, text: "Money you must pay to the government for public services.", word: "Tax" },
-                    { start: 15, end: 33.5, text: "Extra money paid for borrowing, or earned from saving.", word: "Interest" },
-                    { start: 34, end: 49.5, text: "One part of a total payment made monthly.", word: "Installment" },
-                    { start: 50, end: 63.5, text: "The final day or deadline to pay a bill or debt.", word: "Due date" },
-                    { start: 64, end: 75.5, text: "A person or bank that lends money and expects it back.", word: "Creditor" },
-                    { start: 76, end: 94.5, text: "A person who promises to pay a debt if the borrower cannot.", word: "Guarantor" },
-                    { start: 95, end: 118.5, text: "Money you give to a landlord before using their property.", word: "Caution money" },
-                    { start: 119, end: 134.5, text: "A person who owes money to a bank or another person.", word: "Debtor" }
+                    { start: 0, end: 14.5, text: "This is money that you must pay to the government to pay for public things like roads and schools.", word: "Tax" },
+                    { start: 15, end: 33.5, text: "This is the extra money you pay when you borrow money, or the extra money a bank gives you for saving.", word: "Interest" },
+                    { start: 34, end: 49.5, text: "This is one part of a total payment. You pay smaller amounts every month until the debt is finished.", word: "Installment" },
+                    { start: 50, end: 63.5, text: "This is the final day or deadline when you must pay a bill or return borrowed money.", word: "Due date" },
+                    { start: 64, end: 75.5, text: "This is a person or bank that lends money to others and expects to be paid back.", word: "Creditor" },
+                    { start: 76, end: 94.5, text: "This is a person who promises to pay someone else's debt if that person cannot pay it.", word: "Guarantor" },
+                    { start: 95, end: 118.5, text: "This is money you give to a landlord before you use their property (deposit). They keep it to make sure you do not break anything.", word: "Caution money" },
+                    { start: 119, end: 134.5, text: "This is a person who owes money to a bank or another person.", word: "Debtor" }
                 ]
             }
         };
@@ -108,13 +108,14 @@
                     }
                 };
                 audio.addEventListener('timeupdate', stopTrigger);
-            }).catch(err => alert("Click anywhere on the page first!"));
+            }).catch(err => alert("Interaction required: Click anywhere on the screen first."));
         }
 
         function handleRead() {
             const item = repoData[currentCat].items[index];
-            document.getElementById('textPanel').innerText = item.text;
-            document.getElementById('textPanel').classList.remove('hidden');
+            const panel = document.getElementById('textPanel');
+            panel.innerText = item.text; // Exact text used here
+            panel.classList.remove('hidden');
             document.getElementById('step3').disabled = false;
             audio.currentTime = item.start;
             audio.play();
@@ -132,7 +133,7 @@
                 index++; 
                 resetUI(); 
             } else { 
-                alert("Category Mastered!"); 
+                alert("Category Complete!"); 
                 exitToMenu(); 
             }
         }
