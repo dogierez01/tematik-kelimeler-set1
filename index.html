@@ -1,24 +1,30 @@
 const repoData = {
-        "Crime": { file: "crime top 8 female.wav", items: [
-            { start: 0, end: 12, text: "A person who steals wallets or phones from people's pockets quietly.", word: "Pickpocket" },
-            { start: 12, end: 25, text: "A criminal who intentionally starts fires to destroy buildings.", word: "Arsonist" },
-            { start: 25, end: 40, text: "Money or a gift given illegally to get someone to do something dishonest.", word: "Bribe" },
-            { start: 40, end: 55, text: "The money that kidnappers demand to return a captured person safely.", word: "Ransom" },
-            { start: 55, end: 70, text: "A person held prisoner by criminals to force others to pay money.", word: "Hostage" },
-            { start: 70, end: 85, text: "An illegal system or place where banned things are bought and sold.", word: "Black market" },
-            { start: 85, end: 100, text: "A crime where someone threatens to tell secrets unless you pay.", word: "Blackmail" },
-            { start: 100, end: 115, text: "A person who lends money with very high interest and threats.", word: "Loan shark" }
-        ]},
-        "Money": { file: "money top 8 male.wav", items: [
-            { start: 0, end: 15, text: "Money you must pay to the government for public services.", word: "Tax" },
-            { start: 15, end: 34, text: "Extra money paid for borrowing, or earned from saving.", word: "Interest" },
-            { start: 34, end: 50, text: "One part of a total payment made monthly.", word: "Installment" },
-            { start: 50, end: 64, text: "The final day or deadline to pay a bill or debt.", word: "Due date" },
-            { start: 64, end: 76, text: "A person or bank that lends money and expects it back.", word: "Creditor" },
-            { start: 76, end: 95, text: "A person who promises to pay a debt if the borrower cannot.", word: "Guarantor" },
-            { start: 95, end: 119, text: "A deposit given to a landlord before using their property.", word: "Caution money" },
-            { start: 119, end: 135, text: "A person who owes money to a bank or another person.", word: "Debtor" }
-        ]}
+        "Crime": { 
+            file: "crime top 8 female.wav", 
+            items: [
+                { start: 0, end: 12, text: "A person who steals wallets or phones from people's pockets quietly.", word: "Pickpocket" },
+                { start: 12, end: 25, text: "A criminal who intentionally starts fires to destroy buildings.", word: "Arsonist" },
+                { start: 25, end: 40, text: "Money or a gift given illegally to get someone to do something dishonest.", word: "Bribe" },
+                { start: 40, end: 55, text: "The money that kidnappers demand to return a captured person safely.", word: "Ransom" },
+                { start: 55, end: 70, text: "A person held prisoner by criminals to force others to pay money.", word: "Hostage" },
+                { start: 70, end: 85, text: "An illegal system or place where banned things are bought and sold.", word: "Black market" },
+                { start: 85, end: 100, text: "A crime where someone threatens to tell your private secrets unless you pay.", word: "Blackmail" },
+                { start: 100, end: 115, text: "A person who lends money with very high interest and threats.", word: "Loan shark" }
+            ]
+        },
+        "Money": { 
+            file: "money top 8 male.wav", 
+            items: [
+                { start: 0, end: 15, text: "Money you must pay to the government for public services.", word: "Tax" },
+                { start: 15, end: 34, text: "Extra money paid for borrowing, or earned from saving.", word: "Interest" },
+                { start: 34, end: 50, text: "One part of a total payment made monthly.", word: "Installment" },
+                { start: 50, end: 64, text: "The final day or deadline to pay a bill or debt.", word: "Due date" },
+                { start: 64, end: 76, text: "A person or bank that lends money and expects it back.", word: "Creditor" },
+                { start: 76, end: 95, text: "A person who promises to pay a debt if the borrower cannot.", word: "Guarantor" },
+                { start: 95, end: 119, text: "A deposit given to a landlord before using their property.", word: "Caution money" },
+                { start: 119, end: 135, text: "A person who owes money to a bank or another person.", word: "Debtor" }
+            ]
+        }
     };
 
     let currentCat = "";
@@ -28,8 +34,7 @@ const repoData = {
     function initSubject(cat) {
         currentCat = cat;
         index = 0;
-        
-        // We use encodeURI to handle those blank spaces in your filenames
+        // encodeURI ensures the "blanks" in your filenames are handled correctly
         audio.src = encodeURI(repoData[cat].file);
         audio.load(); 
 
@@ -42,15 +47,17 @@ const repoData = {
     function handleListen() {
         const item = repoData[currentCat].items[index];
         audio.currentTime = item.start;
-        audio.play().catch(err => alert("Please click the screen first to enable audio!"));
-
-        const stopTrigger = () => {
-            if (audio.currentTime >= item.end) {
-                audio.pause();
-                audio.removeEventListener('timeupdate', stopTrigger);
-                document.getElementById('readBtn').disabled = false;
-            }
-        };
-        audio.addEventListener('timeupdate', stopTrigger);
+        
+        audio.play().then(() => {
+            const stopTrigger = () => {
+                if (audio.currentTime >= item.end) {
+                    audio.pause();
+                    audio.removeEventListener('timeupdate', stopTrigger);
+                    document.getElementById('readBtn').disabled = false;
+                }
+            };
+            audio.addEventListener('timeupdate', stopTrigger);
+        }).catch(err => {
+            alert("Please click the screen first to allow audio playback!");
+        });
     }
-    // ... (rest of the functions remain the same)
