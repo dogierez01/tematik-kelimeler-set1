@@ -4,45 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Essential English Vocabulary</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* DARK THEME BASE */
+        /* BASE STYLES */
         body { 
             font-family: 'Segoe UI', sans-serif; 
-            background: #111; 
+            background: #000; 
             color: #ffffff;
             display: flex; 
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
             margin: 0; 
+            overflow-x: hidden; /* Prevent scroll on splash */
         }
         
+        /* --- 1. OPENING SPLASH SCREEN (New Feature) --- */
+        #introScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            z-index: 9999; /* On top of everything */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease-out; /* Smooth fade out */
+        }
+
+        .intro-logo {
+            width: 180px; /* Adjust size as needed */
+            height: auto;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5)); /* Gold Glow */
+            animation: floatLogo 3s ease-in-out infinite;
+        }
+
+        @keyframes floatLogo {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .intro-title {
+            font-family: 'Cinzel', serif; /* The "Historic" Font */
+            font-size: 2.5rem;
+            color: #FFD700; /* Gold */
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 50px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .enter-btn {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: #fff;
+            border: 2px solid #FFD700;
+            padding: 15px 40px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .enter-btn:hover {
+            background: #FFD700;
+            color: #000;
+            box-shadow: 0 0 20px #FFD700;
+        }
+
+        .hidden-splash {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* --- 2. MAIN APP STYLES --- */
         .app-card { 
-            background: #222; 
+            background: #1a1a1a; 
             padding: 30px; 
             border-radius: 20px; 
-            box-shadow: 0 0 20px rgba(0,255,255,0.1); 
+            box-shadow: 0 0 30px rgba(0,0,0,0.8); 
             width: 95%; 
             max-width: 450px; 
             text-align: center; 
-            border: 1px solid #444;
+            border: 1px solid #333;
+            /* Hidden initially until splash fades */
+            opacity: 0; 
+            transition: opacity 1s ease-in;
         }
+
+        .app-visible { opacity: 1; }
 
         .hidden { display: none; }
 
         /* HEADER & FLAGS */
         h2 { 
-            font-size: 2rem; 
+            font-family: 'Cinzel', serif; /* Match Intro Font */
+            font-size: 1.8rem; 
             margin-bottom: 10px; 
-            color: #fff; 
+            color: #FFD700; 
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-weight: 800;
+            font-weight: 700;
         }
         
+        .header-logo-small {
+            width: 80px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
         .flag-container {
-            font-size: 4rem; 
-            margin-bottom: 25px;
+            font-size: 3rem; 
+            margin-bottom: 20px;
             letter-spacing: 15px; 
             line-height: 1.2;
         }
@@ -52,128 +132,77 @@
 
         /* NEON MENU BUTTONS */
         .btn-menu { 
-            width: 100%;
-            margin: 15px 0;
-            padding: 20px;
-            background: #000; 
-            border: 2px solid #555;
-            border-radius: 12px;
-            text-align: left; 
-            display: flex; 
-            align-items: center; 
-            gap: 20px;
-            cursor: pointer;
-            color: white;
-            transition: transform 0.1s;
+            width: 100%; margin: 15px 0; padding: 20px;
+            background: #000; border: 2px solid #555; border-radius: 12px;
+            text-align: left; display: flex; align-items: center; gap: 20px;
+            cursor: pointer; color: white; transition: transform 0.1s;
         }
-        
         .btn-menu:active { transform: scale(0.98); }
-
         .menu-icon { font-size: 2.5rem; }
         .menu-text { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; }
 
-        /* NEON COLORS */
         .neon-blue { border-color: #00ffff; color: #00ffff; text-shadow: 0 0 8px #00ffff; box-shadow: 0 0 8px #00ffff inset; }
         .neon-red { border-color: #ff0055; color: #ff0055; text-shadow: 0 0 8px #ff0055; box-shadow: 0 0 8px #ff0055 inset; }
         .neon-green { border-color: #39ff14; color: #39ff14; text-shadow: 0 0 8px #39ff14; box-shadow: 0 0 8px #39ff14 inset; }
         .neon-pink { border-color: #ff00ff; color: #ff00ff; text-shadow: 0 0 8px #ff00ff; box-shadow: 0 0 8px #ff00ff inset; }
         .neon-yellow { border-color: #ffd700; color: #ffd700; text-shadow: 0 0 8px #ffd700; box-shadow: 0 0 8px #ffd700 inset; }
 
-        /* ACTION BUTTONS */
+        /* STUDY BUTTONS */
         .btn { 
             width: 100%; margin: 12px 0; padding: 22px; 
             border: none; border-radius: 12px; 
             font-size: 1.3rem; font-weight: 900; 
-            cursor: pointer; color: white; text-transform: uppercase; 
-            letter-spacing: 1px;
+            cursor: pointer; color: white; text-transform: uppercase; letter-spacing: 1px;
         }
-        
         .btn-1 { background: #009933; border: 1px solid #00ff00; } 
         .btn-2 { background: #0044cc; border: 1px solid #0088ff; } 
         .btn-3 { background: #cc5500; border: 1px solid #ffaa00; } 
         
         /* MIC BUTTON */
         .btn-mic { 
-            background: #2a0038; 
-            border: 2px solid #d000ff; 
-            color: #eebbff;
-            box-shadow: 0 0 15px rgba(208, 0, 255, 0.3);
-            margin-top: 25px;
-            margin-bottom: 5px;
+            background: #2a0038; border: 2px solid #d000ff; color: #eebbff;
+            box-shadow: 0 0 15px rgba(208, 0, 255, 0.3); margin-top: 25px; margin-bottom: 5px;
         }
-        
-        .mic-listening {
-            background: #d000ff !important;
-            color: white !important;
-            box-shadow: 0 0 30px #d000ff;
-            animation: pulse 1s infinite;
-        }
-
+        .mic-listening { background: #d000ff !important; color: white !important; box-shadow: 0 0 30px #d000ff; animation: pulse 1s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
-        /* MIC STATUS TEXT */
-        #micStatus {
-            font-size: 1.1rem;
-            font-weight: bold;
-            min-height: 30px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
+        #micStatus { font-size: 1.1rem; font-weight: bold; min-height: 30px; margin-bottom: 20px; text-transform: uppercase; }
         .status-listening { color: #d000ff; }
         .status-correct { color: #00ff00; text-shadow: 0 0 10px #00ff00; }
         .status-wrong { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
         .status-error { color: #888; font-size: 0.9rem; }
 
         .btn-next { 
-            background: #000; 
-            color: #FFD700; 
-            padding: 30px; 
-            font-size: 1.8rem; 
-            margin-top: 25px; 
-            display: block; 
-            width: 100%; 
-            border: 2px solid #FFD700;
+            background: #000; color: #FFD700; padding: 30px; font-size: 1.8rem; 
+            margin-top: 25px; display: block; width: 100%; border: 2px solid #FFD700;
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
         }
-
         .btn:disabled { background: #333; color: #555; border: 1px solid #444; cursor: not-allowed; box-shadow: none; animation: none; }
 
-        /* RED TRANSCRIPT BOX */
         .display-box { 
-            margin: 25px 0; 
-            padding: 25px; 
-            background: #d32f2f; 
-            color: white;        
-            border-radius: 12px; 
-            text-align: left; 
-            font-size: 1.6rem;   
-            font-weight: 700;    
-            line-height: 1.4; 
+            margin: 25px 0; padding: 25px; background: #d32f2f; color: white; border-radius: 12px; 
+            text-align: left; font-size: 1.6rem; font-weight: 700; line-height: 1.4; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        /* WORD REVEAL - FIXED FOR LONG WORDS */
         .word-reveal { 
-            font-size: 3rem; /* Slightly reduced from 3.5rem to fit better */
-            color: white; 
-            background: #d32f2f;
-            font-weight: 900; 
-            text-transform: uppercase; 
-            margin: 20px 0; 
-            padding: 20px;
-            border-radius: 12px;
-            border: 2px solid white;
-            
-            /* THE FIX: Wrap text if it's too long */
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            line-height: 1.1; 
+            font-size: 3rem; color: white; background: #d32f2f; font-weight: 900; 
+            text-transform: uppercase; margin: 20px 0; padding: 20px; border-radius: 12px; 
+            border: 2px solid white; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.1; 
         }
     </style>
 </head>
 <body>
-    <div class="app-card">
+
+    <div id="introScreen">
+        <img src="logo_gold.png" alt="Logo" class="intro-logo">
+        <div class="intro-title">Essential English</div>
+        <div class="enter-btn" onclick="enterApp()">Click to Enter</div>
+    </div>
+
+    <div class="app-card" id="mainApp">
         <div id="dashboard">
+            <img src="logo_gold.png" alt="Logo" class="header-logo-small">
             <div class="flag-container">
                 🇺🇸 🇬🇧 🇦🇺 🇳🇿
             </div>
@@ -184,19 +213,15 @@
                 <button class="btn-menu neon-blue" onclick="initSubject('Buildings')">
                     <span class="menu-icon">🏢</span> <span class="menu-text">Buildings</span>
                 </button>
-
                 <button class="btn-menu neon-red" onclick="initSubject('Crime')">
                     <span class="menu-icon">⚖️</span> <span class="menu-text">Crime</span>
                 </button>
-                
                 <button class="btn-menu neon-pink" onclick="initSubject('Health')">
                     <span class="menu-icon">🏥</span> <span class="menu-text">Health</span>
                 </button>
-
                 <button class="btn-menu neon-green" onclick="initSubject('Money')">
                     <span class="menu-icon">💰</span> <span class="menu-text">Money</span>
                 </button>
-
                 <button class="btn-menu neon-yellow" onclick="initSubject('Nature')">
                     <span class="menu-icon">🌩️</span> <span class="menu-text">Nature</span>
                 </button>
@@ -227,7 +252,21 @@
     </div>
 
     <script>
-        // DATA REPOSITORY
+        // --- INTRO SCREEN LOGIC ---
+        function enterApp() {
+            const splash = document.getElementById('introScreen');
+            const app = document.getElementById('mainApp');
+            
+            splash.classList.add('hidden-splash'); // Fade out splash
+            app.classList.add('app-visible');      // Fade in app
+            
+            // Remove splash from DOM after fade (optional, but cleaner)
+            setTimeout(() => {
+                splash.style.display = 'none';
+            }, 800);
+        }
+
+        // --- APP LOGIC ---
         const repoData = {
             "Crime": [
                 { file: "crime 1.m4a", t: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", w: "Pickpocket" },
@@ -286,7 +325,7 @@
         let wrongAttempts = 0; 
         const audio = document.getElementById('player');
         
-        // --- SAFE VOICE RECOGNITION SETUP ---
+        // SAFE MIC SETUP
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = SpeechRecognition ? new SpeechRecognition() : null;
 
@@ -300,7 +339,6 @@
                 loadTrack();
             } catch (err) {
                 alert("Error loading section. Please refresh.");
-                console.error(err);
             }
         }
 
@@ -317,13 +355,11 @@
 
         function playAudio(step) {
             const item = repoData[currentCat][index];
-            
             if (step === 2) {
                 document.getElementById('textPanel').innerText = item.t;
                 document.getElementById('textPanel').classList.remove('hidden');
                 document.getElementById('step3').disabled = false;
                 
-                // SAFE MIC CHECK
                 if (recognition) {
                     document.getElementById('micBtn').disabled = false;
                     document.getElementById('micStatus').innerText = "";
@@ -333,9 +369,7 @@
                     document.getElementById('micStatus').className = "status-error";
                 }
             }
-
             audio.play().catch(e => console.log("Audio play error: " + e));
-            
             audio.onended = function() {
                 if (step === 1) document.getElementById('step2').disabled = false;
             };
@@ -343,15 +377,12 @@
 
         function startDictation() {
             if (!recognition) return;
-            
             const micBtn = document.getElementById('micBtn');
             const statusBox = document.getElementById('micStatus');
-            
             try {
                 micBtn.classList.add('mic-listening');
                 statusBox.innerText = "Listening...";
                 statusBox.className = "status-listening";
-                
                 recognition.lang = 'en-US';
                 recognition.start();
             } catch (e) {
@@ -365,17 +396,13 @@
             recognition.onresult = function(event) {
                 const spokenWord = event.results[0][0].transcript.toLowerCase().trim();
                 const correctWord = repoData[currentCat][index].w.toLowerCase().trim();
-                
                 micBtn.classList.remove('mic-listening');
 
-                // SIMPLE MATCH CHECK
                 if (spokenWord.includes(correctWord) || correctWord.includes(spokenWord)) {
-                    // CORRECT
                     statusBox.innerText = "CORRECT! (" + spokenWord + ")";
                     statusBox.className = "status-correct";
                     setTimeout(showWord, 1000); 
                 } else {
-                    // WRONG
                     wrongAttempts++;
                     if (wrongAttempts >= 2) {
                         statusBox.innerText = "Nice try! The word is " + correctWord;
@@ -387,19 +414,11 @@
                     }
                 }
             };
-
             recognition.onerror = function(event) {
                 micBtn.classList.remove('mic-listening');
-                if (event.error === 'not-allowed') {
-                    statusBox.innerText = "Mic Permission Denied";
-                } else if (event.error === 'no-speech') {
-                    statusBox.innerText = "Didn't hear anything";
-                } else {
-                    statusBox.innerText = "Error: " + event.error;
-                }
+                statusBox.innerText = "Mic Error: " + event.error;
                 statusBox.className = "status-wrong";
             };
-            
             recognition.onend = function() {
                 micBtn.classList.remove('mic-listening');
             };
@@ -430,7 +449,6 @@
             document.getElementById('nextBtn').classList.add('hidden');
             document.getElementById('step2').disabled = true;
             document.getElementById('step3').disabled = true;
-            
             document.getElementById('micBtn').disabled = true;
             document.getElementById('micStatus').innerText = "";
             document.getElementById('micStatus').className = "";
