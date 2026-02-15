@@ -19,7 +19,7 @@
             overflow-x: hidden; /* Prevent scroll on splash */
         }
         
-        /* --- 1. OPENING SPLASH SCREEN (New Feature) --- */
+        /* --- 1. OPENING SPLASH SCREEN --- */
         #introScreen {
             position: fixed;
             top: 0;
@@ -118,6 +118,7 @@
             width: 80px;
             height: auto;
             margin-bottom: 15px;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
         }
 
         .flag-container {
@@ -195,14 +196,14 @@
 <body>
 
     <div id="introScreen">
-        <img src="logo_gold.png" alt="Logo" class="intro-logo">
+        <img src="https://dogierez01.github.io/historic-people-t-f/logo_gold.png" alt="Logo" class="intro-logo">
         <div class="intro-title">Essential English</div>
         <div class="enter-btn" onclick="enterApp()">Click to Enter</div>
     </div>
 
     <div class="app-card" id="mainApp">
         <div id="dashboard">
-            <img src="logo_gold.png" alt="Logo" class="header-logo-small">
+            <img src="https://dogierez01.github.io/historic-people-t-f/logo_gold.png" alt="Logo" class="header-logo-small">
             <div class="flag-container">
                 🇺🇸 🇬🇧 🇦🇺 🇳🇿
             </div>
@@ -260,7 +261,6 @@
             splash.classList.add('hidden-splash'); // Fade out splash
             app.classList.add('app-visible');      // Fade in app
             
-            // Remove splash from DOM after fade (optional, but cleaner)
             setTimeout(() => {
                 splash.style.display = 'none';
             }, 800);
