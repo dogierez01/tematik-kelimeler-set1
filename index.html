@@ -91,6 +91,37 @@
         .btn-2 { background: #0044cc; border: 1px solid #0088ff; } 
         .btn-3 { background: #cc5500; border: 1px solid #ffaa00; } 
         
+        /* MIC BUTTON (Purple Neon) */
+        .btn-mic { 
+            background: #2a0038; 
+            border: 2px solid #d000ff; 
+            color: #eebbff;
+            box-shadow: 0 0 15px rgba(208, 0, 255, 0.3);
+            margin-top: 25px;
+            margin-bottom: 5px;
+        }
+        
+        .mic-listening {
+            background: #d000ff !important;
+            color: white !important;
+            box-shadow: 0 0 30px #d000ff;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+
+        /* MIC STATUS TEXT */
+        #micStatus {
+            font-size: 1rem;
+            font-weight: bold;
+            min-height: 30px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .status-listening { color: #d000ff; }
+        .status-correct { color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+        .status-wrong { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+        .status-info { color: #888; font-size: 0.9rem; }
+
         .btn-next { 
             background: #000; 
             color: #FFD700; 
@@ -136,31 +167,21 @@
 <body>
     <div class="app-card">
         <div id="dashboard">
-            <div class="flag-container">
-                🇺🇸 🇬🇧 🇦🇺 🇳🇿
-            </div>
-            
+            <div class="flag-container">🇺🇸 🇬🇧 🇦🇺 🇳🇿</div>
             <h2>Essential English Vocabulary</h2>
             
             <div id="menuBtns" style="margin-top: 30px;">
                 <button class="btn-menu neon-blue" onclick="initSubject('Buildings')">
-                    <span class="menu-icon">🏢</span> 
-                    <span class="menu-text">Buildings</span>
+                    <span class="menu-icon">🏢</span> <span class="menu-text">Buildings</span>
                 </button>
-
                 <button class="btn-menu neon-red" onclick="initSubject('Crime')">
-                    <span class="menu-icon">⚖️</span> 
-                    <span class="menu-text">Crime</span>
+                    <span class="menu-icon">⚖️</span> <span class="menu-text">Crime</span>
                 </button>
-                
                 <button class="btn-menu neon-pink" onclick="initSubject('Health')">
-                    <span class="menu-icon">🏥</span> 
-                    <span class="menu-text">Health</span>
+                    <span class="menu-icon">🏥</span> <span class="menu-text">Health</span>
                 </button>
-
                 <button class="btn-menu neon-green" onclick="initSubject('Money')">
-                    <span class="menu-icon">💰</span> 
-                    <span class="menu-text">Money</span>
+                    <span class="menu-icon">💰</span> <span class="menu-text">Money</span>
                 </button>
             </div>
         </div>
@@ -176,6 +197,10 @@
             
             <button id="step1" class="btn btn-1" onclick="playAudio(1)">Listen</button>
             <button id="step2" class="btn btn-2" onclick="playAudio(2)" disabled>Read & Listen</button>
+            
+            <button id="micBtn" class="btn btn-mic" onclick="startDictation()" disabled>🎤 Speak Answer</button>
+            <div id="micStatus"></div> 
+
             <button id="step3" class="btn btn-3" onclick="showWord()" disabled>Show</button>
 
             <div id="textPanel" class="display-box hidden"></div>
@@ -185,7 +210,7 @@
     </div>
 
     <script>
-        // DATA REPOSITORY (Crime, Money, Buildings, Health)
+        // DATA REPOSITORY
         const repoData = {
             "Crime": [
                 { file: "crime 1.m4a", t: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", w: "Pickpocket" },
@@ -231,7 +256,13 @@
 
         let currentCat = ""; 
         let index = 0; 
+        let wrongAttempts = 0; 
         const audio = document.getElementById('player');
+        
+        // --- SAFE VOICE RECOGNITION SETUP ---
+        // We define it here, but we don't assume it works yet.
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = SpeechRecognition ? new SpeechRecognition() : null;
 
         function initSubject(cat) {
             try {
@@ -241,16 +272,20 @@
                 document.getElementById('studyView').classList.remove('hidden');
                 document.getElementById('catTitle').innerText = cat;
                 loadTrack();
-            } catch (e) {
-                alert("Error: " + e);
+            } catch (err) {
+                alert("Error loading section. Please refresh.");
             }
         }
 
         function loadTrack() {
-            // Encode URI to handle spaces in filenames nicely
-            audio.src = encodeURI(repoData[currentCat][index].file);
-            audio.load();
-            resetUI();
+            try {
+                audio.src = encodeURI(repoData[currentCat][index].file);
+                audio.load();
+                resetUI();
+            } catch (err) {
+                console.log("Audio load error: " + err);
+                resetUI();
+            }
         }
 
         function playAudio(step) {
@@ -260,15 +295,89 @@
                 document.getElementById('textPanel').innerText = item.t;
                 document.getElementById('textPanel').classList.remove('hidden');
                 document.getElementById('step3').disabled = false;
+                
+                // --- THE SECURITY CHECK ---
+                // We check if the page is loaded via 'file:' (Local) or 'http/https' (Server)
+                const isLocal = window.location.protocol === 'file:';
+                
+                if (recognition && !isLocal) {
+                    // SERVER MODE: Enable Mic
+                    document.getElementById('micBtn').disabled = false;
+                    document.getElementById('micStatus').innerText = "";
+                } else {
+                    // LOCAL MODE: Disable Mic (Safe Mode)
+                    document.getElementById('micBtn').disabled = true;
+                    if (isLocal) {
+                        document.getElementById('micStatus').innerText = "Mic disabled (Upload to GitHub to use)";
+                    } else {
+                        document.getElementById('micStatus').innerText = "Mic not supported on this browser";
+                    }
+                    document.getElementById('micStatus').className = "status-info";
+                }
             }
 
-            audio.play().catch(e => {
-                // Ignore audio errors during testing
-                console.log("Audio play error: " + e);
-            });
+            audio.play().catch(e => console.log("Audio play error: " + e));
             
             audio.onended = function() {
                 if (step === 1) document.getElementById('step2').disabled = false;
+            };
+        }
+
+        function startDictation() {
+            if (!recognition) return;
+            
+            const micBtn = document.getElementById('micBtn');
+            const statusBox = document.getElementById('micStatus');
+            
+            try {
+                micBtn.classList.add('mic-listening');
+                statusBox.innerText = "Listening...";
+                statusBox.className = "status-listening";
+                
+                recognition.lang = 'en-US';
+                recognition.start();
+            } catch (e) {
+                // If it fails, we catch the error so the app doesn't freeze
+                console.error(e);
+                statusBox.innerText = "Mic Error. Try refreshing.";
+                statusBox.className = "status-wrong";
+                micBtn.classList.remove('mic-listening');
+                return;
+            }
+
+            recognition.onresult = function(event) {
+                const spokenWord = event.results[0][0].transcript.toLowerCase().trim();
+                const correctWord = repoData[currentCat][index].w.toLowerCase().trim();
+                
+                micBtn.classList.remove('mic-listening');
+
+                if (spokenWord.includes(correctWord) || correctWord.includes(spokenWord)) {
+                    // CORRECT
+                    statusBox.innerText = "CORRECT! (" + spokenWord + ")";
+                    statusBox.className = "status-correct";
+                    setTimeout(showWord, 1000); 
+                } else {
+                    // WRONG
+                    wrongAttempts++;
+                    if (wrongAttempts >= 2) {
+                        statusBox.innerText = "Nice try! The word is " + correctWord;
+                        statusBox.className = "status-wrong";
+                        setTimeout(showWord, 1500); 
+                    } else {
+                        statusBox.innerText = "Try Again! (You said: " + spokenWord + ")";
+                        statusBox.className = "status-wrong";
+                    }
+                }
+            };
+
+            recognition.onerror = function(event) {
+                micBtn.classList.remove('mic-listening');
+                statusBox.innerText = "Listening Error";
+                statusBox.className = "status-wrong";
+            };
+            
+            recognition.onend = function() {
+                micBtn.classList.remove('mic-listening');
             };
         }
 
@@ -276,6 +385,7 @@
             document.getElementById('wordPanel').innerText = repoData[currentCat][index].w;
             document.getElementById('wordPanel').classList.remove('hidden');
             document.getElementById('nextBtn').classList.remove('hidden');
+            document.getElementById('micBtn').disabled = true; 
         }
 
         function goNext() {
@@ -289,12 +399,18 @@
         }
 
         function resetUI() {
+            wrongAttempts = 0; 
             document.getElementById('vocabCounter').innerText = `Vocab ${index + 1}`;
             document.getElementById('textPanel').classList.add('hidden');
             document.getElementById('wordPanel').classList.add('hidden');
             document.getElementById('nextBtn').classList.add('hidden');
             document.getElementById('step2').disabled = true;
             document.getElementById('step3').disabled = true;
+            
+            // Reset Mic UI
+            document.getElementById('micBtn').disabled = true;
+            document.getElementById('micStatus').innerText = "";
+            document.getElementById('micStatus').className = "";
         }
     </script>
 </body>
