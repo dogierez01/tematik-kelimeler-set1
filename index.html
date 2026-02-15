@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Essential English Vocabulary</title>
     <style>
-        /* DARK THEME BASE - Reverted to simple layout */
+        /* DARK THEME BASE */
         body { 
             font-family: 'Segoe UI', sans-serif; 
-            background: #111; /* Dark Gray, not pitch black */
+            background: #111; 
             color: #ffffff;
             display: flex; 
             justify-content: center; 
@@ -18,10 +18,10 @@
         }
         
         .app-card { 
-            background: #222; /* Visible Dark Card */
+            background: #222; 
             padding: 30px; 
             border-radius: 20px; 
-            box-shadow: 0 0 20px rgba(0,255,255,0.1); /* Slight glow */
+            box-shadow: 0 0 20px rgba(0,255,255,0.1); 
             width: 95%; 
             max-width: 450px; 
             text-align: center; 
@@ -41,9 +41,10 @@
         }
         
         .flag-container {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            letter-spacing: 15px; /* Space out the flags */
+            font-size: 4rem; /* SUPER SIZED FLAGS */
+            margin-bottom: 25px;
+            letter-spacing: 15px; 
+            line-height: 1.2;
         }
 
         h3 { font-size: 2.5rem; margin: 10px 0; color: #fff; text-transform: uppercase; }
@@ -68,12 +69,12 @@
         .menu-icon { font-size: 2.5rem; }
         .menu-text { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; }
 
-        /* NEON COLORS for Menu */
+        /* NEON COLORS */
         .neon-blue { border-color: #00ffff; color: #00ffff; text-shadow: 0 0 8px #00ffff; box-shadow: 0 0 8px #00ffff inset; }
         .neon-red { border-color: #ff0055; color: #ff0055; text-shadow: 0 0 8px #ff0055; box-shadow: 0 0 8px #ff0055 inset; }
         .neon-green { border-color: #39ff14; color: #39ff14; text-shadow: 0 0 8px #39ff14; box-shadow: 0 0 8px #39ff14 inset; }
 
-        /* ACTION BUTTONS */
+        /* ACTION BUTTONS (No Numbers) */
         .btn { 
             width: 100%; margin: 12px 0; padding: 22px; 
             border: none; border-radius: 12px; 
@@ -100,7 +101,7 @@
 
         .btn:disabled { background: #333; color: #555; border: 1px solid #444; cursor: not-allowed; box-shadow: none; }
 
-        /* RED TRANSCRIPT BOX (Preserved) */
+        /* RED TRANSCRIPT BOX */
         .display-box { 
             margin: 25px 0; 
             padding: 25px; 
@@ -114,7 +115,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        /* WORD REVEAL (Preserved) */
+        /* WORD REVEAL */
         .word-reveal { 
             font-size: 3.5rem; 
             color: white; 
@@ -164,9 +165,9 @@
             
             <audio id="player"></audio>
             
-            <button id="step1" class="btn btn-1" onclick="playAudio(1)">1. Listen</button>
-            <button id="step2" class="btn btn-2" onclick="playAudio(2)" disabled>2. Read & Listen</button>
-            <button id="step3" class="btn btn-3" onclick="showWord()" disabled>3. Show</button>
+            <button id="step1" class="btn btn-1" onclick="playAudio(1)">Listen</button>
+            <button id="step2" class="btn btn-2" onclick="playAudio(2)" disabled>Read & Listen</button>
+            <button id="step3" class="btn btn-3" onclick="showWord()" disabled>Show</button>
 
             <div id="textPanel" class="display-box hidden"></div>
             <div id="wordPanel" class="word-reveal hidden"></div>
