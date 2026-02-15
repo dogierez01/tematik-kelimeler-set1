@@ -91,7 +91,7 @@
         .btn-2 { background: #0044cc; border: 1px solid #0088ff; } 
         .btn-3 { background: #cc5500; border: 1px solid #ffaa00; } 
         
-        /* MIC BUTTON (Purple Neon) */
+        /* MIC BUTTON */
         .btn-mic { 
             background: #2a0038; 
             border: 2px solid #d000ff; 
@@ -107,11 +107,12 @@
             box-shadow: 0 0 30px #d000ff;
             animation: pulse 1s infinite;
         }
+
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
         /* MIC STATUS TEXT */
         #micStatus {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: bold;
             min-height: 30px;
             margin-bottom: 20px;
@@ -120,7 +121,7 @@
         .status-listening { color: #d000ff; }
         .status-correct { color: #00ff00; text-shadow: 0 0 10px #00ff00; }
         .status-wrong { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
-        .status-info { color: #888; font-size: 0.9rem; }
+        .status-error { color: #888; font-size: 0.9rem; }
 
         .btn-next { 
             background: #000; 
@@ -167,19 +168,25 @@
 <body>
     <div class="app-card">
         <div id="dashboard">
-            <div class="flag-container">🇺🇸 🇬🇧 🇦🇺 🇳🇿</div>
+            <div class="flag-container">
+                🇺🇸 🇬🇧 🇦🇺 🇳🇿
+            </div>
+            
             <h2>Essential English Vocabulary</h2>
             
             <div id="menuBtns" style="margin-top: 30px;">
                 <button class="btn-menu neon-blue" onclick="initSubject('Buildings')">
                     <span class="menu-icon">🏢</span> <span class="menu-text">Buildings</span>
                 </button>
+
                 <button class="btn-menu neon-red" onclick="initSubject('Crime')">
                     <span class="menu-icon">⚖️</span> <span class="menu-text">Crime</span>
                 </button>
+                
                 <button class="btn-menu neon-pink" onclick="initSubject('Health')">
                     <span class="menu-icon">🏥</span> <span class="menu-text">Health</span>
                 </button>
+
                 <button class="btn-menu neon-green" onclick="initSubject('Money')">
                     <span class="menu-icon">💰</span> <span class="menu-text">Money</span>
                 </button>
@@ -260,7 +267,6 @@
         const audio = document.getElementById('player');
         
         // --- SAFE VOICE RECOGNITION SETUP ---
-        // We define it here, but we don't assume it works yet.
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = SpeechRecognition ? new SpeechRecognition() : null;
 
@@ -274,6 +280,7 @@
                 loadTrack();
             } catch (err) {
                 alert("Error loading section. Please refresh.");
+                console.error(err);
             }
         }
 
@@ -296,23 +303,14 @@
                 document.getElementById('textPanel').classList.remove('hidden');
                 document.getElementById('step3').disabled = false;
                 
-                // --- THE SECURITY CHECK ---
-                // We check if the page is loaded via 'file:' (Local) or 'http/https' (Server)
-                const isLocal = window.location.protocol === 'file:';
-                
-                if (recognition && !isLocal) {
-                    // SERVER MODE: Enable Mic
+                // SAFE MIC CHECK: Only enable if recognition exists
+                if (recognition) {
                     document.getElementById('micBtn').disabled = false;
                     document.getElementById('micStatus').innerText = "";
                 } else {
-                    // LOCAL MODE: Disable Mic (Safe Mode)
                     document.getElementById('micBtn').disabled = true;
-                    if (isLocal) {
-                        document.getElementById('micStatus').innerText = "Mic disabled (Upload to GitHub to use)";
-                    } else {
-                        document.getElementById('micStatus').innerText = "Mic not supported on this browser";
-                    }
-                    document.getElementById('micStatus').className = "status-info";
+                    document.getElementById('micStatus').innerText = "Mic not supported";
+                    document.getElementById('micStatus').className = "status-error";
                 }
             }
 
@@ -337,9 +335,9 @@
                 recognition.lang = 'en-US';
                 recognition.start();
             } catch (e) {
-                // If it fails, we catch the error so the app doesn't freeze
+                // Handle Permission Errors Gracefully
                 console.error(e);
-                statusBox.innerText = "Mic Error. Try refreshing.";
+                statusBox.innerText = "Mic blocked. Check settings.";
                 statusBox.className = "status-wrong";
                 micBtn.classList.remove('mic-listening');
                 return;
@@ -351,6 +349,7 @@
                 
                 micBtn.classList.remove('mic-listening');
 
+                // SIMPLE MATCH CHECK
                 if (spokenWord.includes(correctWord) || correctWord.includes(spokenWord)) {
                     // CORRECT
                     statusBox.innerText = "CORRECT! (" + spokenWord + ")";
@@ -372,7 +371,13 @@
 
             recognition.onerror = function(event) {
                 micBtn.classList.remove('mic-listening');
-                statusBox.innerText = "Listening Error";
+                if (event.error === 'not-allowed') {
+                    statusBox.innerText = "Mic Permission Denied";
+                } else if (event.error === 'no-speech') {
+                    statusBox.innerText = "Didn't hear anything";
+                } else {
+                    statusBox.innerText = "Error: " + event.error;
+                }
                 statusBox.className = "status-wrong";
             };
             
