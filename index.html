@@ -41,7 +41,7 @@
         }
         
         .flag-container {
-            font-size: 4rem; /* SUPER SIZED FLAGS */
+            font-size: 4rem; 
             margin-bottom: 25px;
             letter-spacing: 15px; 
             line-height: 1.2;
@@ -74,7 +74,7 @@
         .neon-red { border-color: #ff0055; color: #ff0055; text-shadow: 0 0 8px #ff0055; box-shadow: 0 0 8px #ff0055 inset; }
         .neon-green { border-color: #39ff14; color: #39ff14; text-shadow: 0 0 8px #39ff14; box-shadow: 0 0 8px #39ff14 inset; }
 
-        /* ACTION BUTTONS (No Numbers) */
+        /* ACTION BUTTONS */
         .btn { 
             width: 100%; margin: 12px 0; padding: 22px; 
             border: none; border-radius: 12px; 
@@ -87,6 +87,37 @@
         .btn-2 { background: #0044cc; border: 1px solid #0088ff; } 
         .btn-3 { background: #cc5500; border: 1px solid #ffaa00; } 
         
+        /* NEW: PURPLE MIC BUTTON */
+        .btn-mic { 
+            background: #2a0038; 
+            border: 2px solid #d000ff; 
+            color: #eebbff;
+            box-shadow: 0 0 15px rgba(208, 0, 255, 0.3);
+            margin-top: 25px;
+            margin-bottom: 5px;
+        }
+        
+        .mic-listening {
+            background: #d000ff !important;
+            color: white !important;
+            box-shadow: 0 0 30px #d000ff;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+
+        /* MIC STATUS TEXT */
+        #micStatus {
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-height: 30px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .status-listening { color: #d000ff; }
+        .status-correct { color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+        .status-wrong { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+
         .btn-next { 
             background: #000; 
             color: #FFD700; 
@@ -99,7 +130,7 @@
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
         }
 
-        .btn:disabled { background: #333; color: #555; border: 1px solid #444; cursor: not-allowed; box-shadow: none; }
+        .btn:disabled { background: #333; color: #555; border: 1px solid #444; cursor: not-allowed; box-shadow: none; animation: none; }
 
         /* RED TRANSCRIPT BOX */
         .display-box { 
@@ -167,7 +198,9 @@
             
             <button id="step1" class="btn btn-1" onclick="playAudio(1)">Listen</button>
             <button id="step2" class="btn btn-2" onclick="playAudio(2)" disabled>Read & Listen</button>
-            <button id="step3" class="btn btn-3" onclick="showWord()" disabled>Show</button>
+            
+            <button id="micBtn" class="btn btn-mic" onclick="startDictation()" disabled>🎤 Speak Answer</button>
+            <div id="micStatus"></div> <button id="step3" class="btn btn-3" onclick="showWord()" disabled>Show</button>
 
             <div id="textPanel" class="display-box hidden"></div>
             <div id="wordPanel" class="word-reveal hidden"></div>
@@ -176,99 +209,9 @@
     </div>
 
     <script>
-        // LOGIC UNTOUCHED
+        // LOGIC
         const repoData = {
             "Crime": [
                 { file: "crime 1.m4a", t: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", w: "Pickpocket" },
                 { file: "crime 2.m4a", t: "This is a criminal who intentionally starts fires to destroy buildings or cars.", w: "Arsonist" },
-                { file: "crime 3.m4a", t: "This is money or a gift that you give to someone (like an official) illegally to get them to do something dishonest for you.", w: "Bribe" },
-                { file: "crime 4.m4a", t: "This is the money that kidnappers demand. You must pay this to get a captured person back safely.", w: "Ransom" },
-                { file: "crime 5.m4a", t: "This is a person who is captured and held prisoner by criminals to force others to pay money.", w: "Hostage" },
-                { file: "crime 6.m4a", t: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", w: "Black market" },
-                { file: "crime 7.m4a", t: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", w: "Blackmail" },
-                { file: "crime 8.m4a", t: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", w: "Loan shark" }
-            ],
-            "Money": [
-                { file: "money 1.m4a", t: "This is money that you must pay to the government to pay for public things like roads and schools.", w: "Tax" },
-                { file: "money 2.m4a", t: "This is the extra money you pay when you borrow money, or the extra money a bank gives you for saving.", w: "Interest" },
-                { file: "money 3.m4a", t: "This is one part of a total payment. You pay smaller amounts every month until the debt is finished.", w: "Installment" },
-                { file: "money 4.m4a", t: "This is the final day or deadline when you must pay a bill or return borrowed money.", w: "Due date" },
-                { file: "money 5.m4a", t: "This is a person or bank that lends money to others and expects to be paid back.", w: "Creditor" },
-                { file: "money 6.m4a", t: "This is a person who promises to pay someone else's debt if that person cannot pay it.", w: "Guarantor" },
-                { file: "money 7.m4a", t: "This is money you give to a landlord before you use their property (deposit). They keep it to make sure you do not break anything.", w: "Caution money" },
-                { file: "money 8.m4a", t: "This is a person who owes money to a bank or another person.", w: "Debtor" }
-            ],
-            "Buildings": [
-                { file: "building 1.m4a", t: "This is a very tall building with many floors, usually seen in big cities.", w: "Skyscraper" },
-                { file: "building 2.m4a", t: "This is the person who owns a house or apartment and rents it to other people for money.", w: "Landlord/Landlady" },
-                { file: "building 3.m4a", t: "This is the system of underground pipes that carries dirty water and waste away from buildings.", w: "Sewer" },
-                { file: "building 4.m4a", t: "This is a person whose job is to help people buy, sell, or rent houses and land.", w: "Real estate agent" },
-                { file: "building 5.m4a", t: "This is a person who pays rent to live in a house or apartment.", w: "Tenant" },
-                { file: "building 6.m4a", t: "This is the device in your kitchen or bathroom that you turn to get water.", w: "Tap" },
-                { file: "building 7.m4a", t: "This is a very large indoor building that has many different stores, restaurants, and cinemas inside.", w: "Mall" },
-                { file: "building 8.m4a", t: "This is a worker whose job is to fit and repair water pipes, toilets, and baths.", w: "Plumber" }
-            ]
-        };
-
-        let currentCat = ""; 
-        let index = 0; 
-        const audio = document.getElementById('player');
-
-        function initSubject(cat) {
-            currentCat = cat; 
-            index = 0;
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('studyView').classList.remove('hidden');
-            document.getElementById('catTitle').innerText = cat;
-            loadTrack(); 
-        }
-
-        function loadTrack() {
-            audio.src = encodeURI(repoData[currentCat][index].file);
-            audio.load();
-            resetUI();
-        }
-
-        function playAudio(step) {
-            const item = repoData[currentCat][index];
-            
-            if (step === 2) {
-                document.getElementById('textPanel').innerText = item.t;
-                document.getElementById('textPanel').classList.remove('hidden');
-                document.getElementById('step3').disabled = false;
-            }
-
-            audio.play().catch(e => alert("Error playing audio: " + e));
-            
-            audio.onended = function() {
-                if (step === 1) document.getElementById('step2').disabled = false;
-            };
-        }
-
-        function showWord() {
-            document.getElementById('wordPanel').innerText = repoData[currentCat][index].w;
-            document.getElementById('wordPanel').classList.remove('hidden');
-            document.getElementById('nextBtn').classList.remove('hidden');
-        }
-
-        function goNext() {
-            if (index < 7) {
-                index++;
-                loadTrack(); 
-            } else {
-                alert("Mastered!");
-                location.reload();
-            }
-        }
-
-        function resetUI() {
-            document.getElementById('vocabCounter').innerText = `Vocab ${index + 1}`;
-            document.getElementById('textPanel').classList.add('hidden');
-            document.getElementById('wordPanel').classList.add('hidden');
-            document.getElementById('nextBtn').classList.add('hidden');
-            document.getElementById('step2').disabled = true;
-            document.getElementById('step3').disabled = true;
-        }
-    </script>
-</body>
-</html>
+                { file: "crime 3.m4a", t: "This is money or a gift that you give to someone (like an official)
