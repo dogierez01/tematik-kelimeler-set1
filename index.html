@@ -149,6 +149,7 @@
         .neon-yellow { border-color: #ffd700; color: #ffd700; text-shadow: 0 0 8px #ffd700; box-shadow: 0 0 8px #ffd700 inset; }
         .neon-orange { border-color: #ff9900; color: #ff9900; text-shadow: 0 0 8px #ff9900; box-shadow: 0 0 8px #ff9900 inset; }
         .neon-purple { border-color: #9d00ff; color: #9d00ff; text-shadow: 0 0 8px #9d00ff; box-shadow: 0 0 8px #9d00ff inset; }
+        .neon-lime { border-color: #ccff00; color: #ccff00; text-shadow: 0 0 8px #ccff00; box-shadow: 0 0 8px #ccff00 inset; }
 
         /* STUDY BUTTONS */
         .btn { 
@@ -219,14 +220,17 @@
                 <button class="btn-menu neon-red" onclick="initSubject('Crime')">
                     <span class="menu-icon">⚖️</span> <span class="menu-text">Crime</span>
                 </button>
+                
+                <button class="btn-menu neon-lime" onclick="initSubject('Food')">
+                    <span class="menu-icon">🍎</span> <span class="menu-text">Food</span>
+                </button>
+
                 <button class="btn-menu neon-pink" onclick="initSubject('Health')">
                     <span class="menu-icon">🏥</span> <span class="menu-text">Health</span>
                 </button>
-                
                 <button class="btn-menu neon-purple" onclick="initSubject('Legal')">
                     <span class="menu-icon">⚖️</span> <span class="menu-text">Legal</span>
                 </button>
-
                 <button class="btn-menu neon-green" onclick="initSubject('Money')">
                     <span class="menu-icon">💰</span> <span class="menu-text">Money</span>
                 </button>
@@ -297,6 +301,16 @@
                 { file: "crime 6.m4a", t: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", w: "Black market" },
                 { file: "crime 7.m4a", t: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", w: "Blackmail" },
                 { file: "crime 8.m4a", t: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", w: "Loan shark" }
+            ],
+            "Food": [
+                { file: "food 1.m4a", t: "This is the action of moving food or drink from your mouth down your throat.", w: "Swallow" },
+                { file: "food 2.m4a", t: "This is a shop or person that mainly sells fresh fruit and vegetables.", w: "Greengrocer" },
+                { file: "food 3.m4a", t: "This describes food that has not been cooked.", w: "Raw" },
+                { file: "food 4.m4a", t: "This is a place where bread, cakes, and cookies are made or sold.", w: "Bakery" },
+                { file: "food 5.m4a", t: "This is a category of food made from milk (cheese, yogurt) or a shop that sells these things.", w: "Dairy" },
+                { file: "food 6.m4a", t: "This is a shop that sells special prepared foods like cooked meats and expensive cheeses.", w: "Deli" },
+                { file: "food 7.m4a", t: "This is a person whose job is to cut and sell meat.", w: "Butcher" },
+                { file: "food 8.m4a", t: "This is the action of drinking a very small amount of liquid at a time.", w: "Sip" }
             ],
             "Health": [
                 { file: "health 1.m4a", t: "This is a feeling where your head spins and you feel like you might fall.", w: "Dizziness" },
