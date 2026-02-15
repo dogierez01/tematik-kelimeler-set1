@@ -19,129 +19,73 @@
             overflow-x: hidden; 
         }
         
-        /* --- 1. OPENING SPLASH SCREEN --- */
+        /* --- INTRO SCREEN --- */
         #introScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000000;
-            z-index: 9999; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000000; z-index: 9999; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
             transition: opacity 0.8s ease-out; 
         }
-
         .intro-logo {
-            width: 300px; 
-            height: auto;
-            margin-bottom: 30px;
+            width: 300px; height: auto; margin-bottom: 30px;
             filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5)); 
             animation: floatLogo 3s ease-in-out infinite;
         }
-
         @keyframes floatLogo {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
-
         .intro-title {
-            font-family: 'Cinzel', serif; 
-            font-size: 2.5rem;
-            color: #FFD700; 
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 50px;
-            text-align: center;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            font-family: 'Cinzel', serif; font-size: 2.5rem; color: #FFD700; 
+            text-transform: uppercase; letter-spacing: 3px; margin-bottom: 50px;
+            text-align: center; text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
-
         .enter-btn {
-            font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
-            color: #fff;
-            border: 2px solid #FFD700;
-            padding: 15px 40px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s;
+            font-family: 'Cinzel', serif; font-size: 1.5rem; color: #fff;
+            border: 2px solid #FFD700; padding: 15px 40px; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;
             background: rgba(0,0,0,0.5);
         }
-
         .enter-btn:hover {
-            background: #FFD700;
-            color: #000;
-            box-shadow: 0 0 20px #FFD700;
+            background: #FFD700; color: #000; box-shadow: 0 0 20px #FFD700;
         }
+        .hidden-splash { opacity: 0; pointer-events: none; }
 
-        .hidden-splash {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* --- 2. MAIN APP STYLES --- */
+        /* --- MAIN APP --- */
         .app-card { 
-            background: #1a1a1a; 
-            padding: 30px; 
-            border-radius: 20px; 
-            box-shadow: 0 0 30px rgba(0,0,0,0.8); 
-            width: 95%; 
-            max-width: 450px; 
-            text-align: center; 
-            border: 1px solid #333;
-            opacity: 0; 
-            transition: opacity 1s ease-in;
+            background: #1a1a1a; padding: 30px; border-radius: 20px; 
+            box-shadow: 0 0 30px rgba(0,0,0,0.8); width: 95%; max-width: 450px; 
+            text-align: center; border: 1px solid #333; opacity: 0; transition: opacity 1s ease-in;
         }
-
         .app-visible { opacity: 1; }
-
         .hidden { display: none; }
 
-        /* HEADER & FLAGS */
+        /* HEADER */
         h2 { 
-            font-family: 'Cinzel', serif; 
-            font-size: 1.8rem; 
-            margin-bottom: 10px; 
-            color: #FFD700; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
+            font-family: 'Cinzel', serif; font-size: 1.8rem; margin-bottom: 10px; 
+            color: #FFD700; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
         }
-        
         .header-logo-small {
-            width: 80px;
-            height: auto;
-            margin-bottom: 15px;
+            width: 80px; height: auto; margin-bottom: 15px;
             filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
         }
-
-        .flag-container {
-            font-size: 3rem; 
-            margin-bottom: 20px;
-            letter-spacing: 15px; 
-            line-height: 1.2;
-        }
-
+        .flag-container { font-size: 3rem; margin-bottom: 20px; letter-spacing: 15px; line-height: 1.2; }
         h3 { font-size: 2.5rem; margin: 10px 0; color: #fff; text-transform: uppercase; }
         p#vocabCounter { font-size: 1.2rem; font-weight: bold; color: #888; margin-bottom: 20px; }
 
-        /* NEON MENU BUTTONS */
+        /* MENU BUTTONS */
         .btn-menu { 
-            width: 100%; margin: 15px 0; padding: 20px;
-            background: #000; border: 2px solid #555; border-radius: 12px;
-            text-align: left; display: flex; align-items: center; gap: 20px;
-            cursor: pointer; color: white; transition: transform 0.1s;
+            width: 100%; margin: 15px 0; padding: 20px; background: #000; 
+            border: 2px solid #555; border-radius: 12px; text-align: left; 
+            display: flex; align-items: center; gap: 20px; cursor: pointer; 
+            color: white; transition: transform 0.1s;
         }
         .btn-menu:active { transform: scale(0.98); }
         .menu-icon { font-size: 2.5rem; }
         .menu-text { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; }
 
-        /* NEON COLORS DEFINITIONS */
+        /* NEON COLORS */
         .neon-blue { border-color: #00ffff; color: #00ffff; text-shadow: 0 0 8px #00ffff; box-shadow: 0 0 8px #00ffff inset; }
         .neon-red { border-color: #ff0055; color: #ff0055; text-shadow: 0 0 8px #ff0055; box-shadow: 0 0 8px #ff0055 inset; }
         .neon-green { border-color: #39ff14; color: #39ff14; text-shadow: 0 0 8px #39ff14; box-shadow: 0 0 8px #39ff14 inset; }
@@ -153,18 +97,17 @@
         .neon-cyan { border-color: #00e5ff; color: #00e5ff; text-shadow: 0 0 8px #00e5ff; box-shadow: 0 0 8px #00e5ff inset; }
         .neon-white { border-color: #ffffff; color: #ffffff; text-shadow: 0 0 8px #ffffff; box-shadow: 0 0 8px #ffffff inset; }
 
-        /* STUDY BUTTONS */
+        /* ACTION BUTTONS */
         .btn { 
             width: 100%; margin: 12px 0; padding: 22px; 
-            border: none; border-radius: 12px; 
-            font-size: 1.3rem; font-weight: 900; 
-            cursor: pointer; color: white; text-transform: uppercase; letter-spacing: 1px;
+            border: none; border-radius: 12px; font-size: 1.3rem; 
+            font-weight: 900; cursor: pointer; color: white; 
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        .btn-1 { background: #009933; border: 1px solid #00ff00; } 
-        .btn-2 { background: #0044cc; border: 1px solid #0088ff; } 
-        .btn-3 { background: #cc5500; border: 1px solid #ffaa00; } 
+        .btn-1 { background: #009933; border: 1px solid #00ff00; } /* LISTEN */
+        .btn-2 { background: #0044cc; border: 1px solid #0088ff; } /* READ & LISTEN */
         
-        /* MIC BUTTON */
+        /* MIC BUTTON (Step 2) */
         .btn-mic { 
             background: #2a0038; border: 2px solid #d000ff; color: #eebbff;
             box-shadow: 0 0 15px rgba(208, 0, 255, 0.3); margin-top: 25px; margin-bottom: 5px;
@@ -185,12 +128,12 @@
         }
         .btn:disabled { background: #333; color: #555; border: 1px solid #444; cursor: not-allowed; box-shadow: none; animation: none; }
 
+        /* TEXT BOXES */
         .display-box { 
-            margin: 25px 0; padding: 25px; background: #d32f2f; color: white; border-radius: 12px; 
-            text-align: left; font-size: 1.6rem; font-weight: 700; line-height: 1.4; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin: 25px 0; padding: 25px; background: #d32f2f; color: white; 
+            border-radius: 12px; text-align: left; font-size: 1.6rem; 
+            font-weight: 700; line-height: 1.4; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
-
         .word-reveal { 
             font-size: 3rem; color: white; background: #d32f2f; font-weight: 900; 
             text-transform: uppercase; margin: 20px 0; padding: 20px; border-radius: 12px; 
@@ -209,10 +152,7 @@
     <div class="app-card" id="mainApp">
         <div id="dashboard">
             <img src="logo_gold.png" alt="Logo" class="header-logo-small">
-            <div class="flag-container">
-                🇺🇸 🇬🇧 🇦🇺 🇳🇿
-            </div>
-            
+            <div class="flag-container">🇺🇸 🇬🇧 🇦🇺 🇳🇿</div>
             <h2>Essential English Vocabulary</h2>
             
             <div id="menuBtns" style="margin-top: 30px;">
@@ -222,11 +162,9 @@
                 <button class="btn-menu neon-red" onclick="initSubject('Crime')">
                     <span class="menu-icon">⚖️</span> <span class="menu-text">Crime</span>
                 </button>
-                
                 <button class="btn-menu neon-white" onclick="initSubject('Education')">
                     <span class="menu-icon">🎓</span> <span class="menu-text">Education</span>
                 </button>
-
                 <button class="btn-menu neon-lime" onclick="initSubject('Food')">
                     <span class="menu-icon">🍎</span> <span class="menu-text">Food</span>
                 </button>
@@ -260,35 +198,29 @@
             
             <audio id="player"></audio>
             
-            <button id="step1" class="btn btn-1" onclick="playAudio(1)">Listen</button>
-            <button id="step2" class="btn btn-2" onclick="playAudio(2)" disabled>Read & Listen</button>
+            <button id="step1" class="btn btn-1" onclick="playAudioOnly()">1. Listen (Blind)</button>
             
-            <button id="micBtn" class="btn btn-mic" onclick="startDictation()" disabled>🎤 Speak Answer</button>
+            <button id="micBtn" class="btn btn-mic" onclick="startDictation()" disabled>🎤 2. Speak Answer</button>
             <div id="micStatus"></div> 
 
-            <button id="step3" class="btn btn-3" onclick="showWord()" disabled>Show</button>
-
-            <div id="textPanel" class="display-box hidden"></div>
             <div id="wordPanel" class="word-reveal hidden"></div>
+            <div id="textPanel" class="display-box hidden"></div>
+            
+            <button id="stepReview" class="btn btn-2 hidden" onclick="playAudioOnly()">🔊 Read & Listen Again</button>
+
             <button id="nextBtn" class="btn btn-next hidden" onclick="goNext()">NEXT WORD →</button>
         </div>
     </div>
 
     <script>
-        // --- INTRO SCREEN LOGIC ---
+        // --- INTRO LOGIC ---
         function enterApp() {
-            const splash = document.getElementById('introScreen');
-            const app = document.getElementById('mainApp');
-            
-            splash.classList.add('hidden-splash'); // Fade out splash
-            app.classList.add('app-visible');      // Fade in app
-            
-            setTimeout(() => {
-                splash.style.display = 'none';
-            }, 800);
+            document.getElementById('introScreen').classList.add('hidden-splash');
+            document.getElementById('mainApp').classList.add('app-visible');
+            setTimeout(() => { document.getElementById('introScreen').style.display = 'none'; }, 800);
         }
 
-        // --- APP LOGIC ---
+        // --- DATA ---
         const repoData = {
             "Buildings": [
                 { file: "building 1.m4a", t: "This is a very tall building with many floors, usually seen in big cities.", w: "Skyscraper" },
@@ -402,48 +334,28 @@
         const recognition = SpeechRecognition ? new SpeechRecognition() : null;
 
         function initSubject(cat) {
-            try {
-                currentCat = cat; 
-                index = 0;
-                document.getElementById('dashboard').classList.add('hidden');
-                document.getElementById('studyView').classList.remove('hidden');
-                document.getElementById('catTitle').innerText = cat;
-                loadTrack();
-            } catch (err) {
-                alert("Error loading section. Please refresh.");
-            }
+            currentCat = cat; index = 0;
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('studyView').classList.remove('hidden');
+            document.getElementById('catTitle').innerText = cat;
+            resetUI();
         }
 
-        function loadTrack() {
-            try {
-                audio.src = encodeURI(repoData[currentCat][index].file);
-                audio.load();
-                resetUI();
-            } catch (err) {
-                console.log("Audio load error: " + err);
-                resetUI();
-            }
-        }
-
-        function playAudio(step) {
-            const item = repoData[currentCat][index];
-            if (step === 2) {
-                document.getElementById('textPanel').innerText = item.t;
-                document.getElementById('textPanel').classList.remove('hidden');
-                document.getElementById('step3').disabled = false;
-                
+        function playAudioOnly() {
+            // Audio setup
+            audio.src = encodeURI(repoData[currentCat][index].file);
+            audio.load();
+            audio.play().catch(e => console.log(e));
+            
+            // Unlock mic after audio ends
+            audio.onended = function() {
                 if (recognition) {
                     document.getElementById('micBtn').disabled = false;
-                    document.getElementById('micStatus').innerText = "";
+                    document.getElementById('micStatus').innerText = "Mic Ready. Tap to speak.";
+                    document.getElementById('micStatus').className = "status-listening";
                 } else {
-                    document.getElementById('micBtn').disabled = true;
-                    document.getElementById('micStatus').innerText = "Mic not supported";
-                    document.getElementById('micStatus').className = "status-error";
+                    document.getElementById('micStatus').innerText = "Mic Not Supported.";
                 }
-            }
-            audio.play().catch(e => console.log("Audio play error: " + e));
-            audio.onended = function() {
-                if (step === 1) document.getElementById('step2').disabled = false;
             };
         }
 
@@ -459,10 +371,8 @@
                 recognition.start();
             } catch (e) {
                 console.error(e);
-                statusBox.innerText = "Mic blocked. Check settings.";
-                statusBox.className = "status-wrong";
+                statusBox.innerText = "Mic blocked. Refresh.";
                 micBtn.classList.remove('mic-listening');
-                return;
             }
 
             recognition.onresult = function(event) {
@@ -470,45 +380,56 @@
                 const correctWord = repoData[currentCat][index].w.toLowerCase().trim();
                 micBtn.classList.remove('mic-listening');
 
+                // CHECK
                 if (spokenWord.includes(correctWord) || correctWord.includes(spokenWord)) {
+                    // CORRECT!
                     statusBox.innerText = "CORRECT! (" + spokenWord + ")";
                     statusBox.className = "status-correct";
-                    setTimeout(showWord, 1000); 
+                    revealAll();
                 } else {
+                    // WRONG
                     wrongAttempts++;
                     if (wrongAttempts >= 2) {
-                        statusBox.innerText = "Nice try! The word is " + correctWord;
+                        statusBox.innerText = "Wrong again. The answer is shown.";
                         statusBox.className = "status-wrong";
-                        setTimeout(showWord, 1500); 
+                        revealAll();
                     } else {
-                        statusBox.innerText = "Try Again! (You said: " + spokenWord + ")";
+                        statusBox.innerText = "Try Again! (1 attempt left)";
                         statusBox.className = "status-wrong";
                     }
                 }
             };
-            recognition.onerror = function(event) {
+            
+            recognition.onerror = function(e) {
                 micBtn.classList.remove('mic-listening');
-                statusBox.innerText = "Mic Error: " + event.error;
-                statusBox.className = "status-wrong";
+                statusBox.innerText = "Error. Try again.";
             };
+            
             recognition.onend = function() {
                 micBtn.classList.remove('mic-listening');
             };
         }
 
-        function showWord() {
-            document.getElementById('wordPanel').innerText = repoData[currentCat][index].w;
+        function revealAll() {
+            // SHOW EVERYTHING
+            const item = repoData[currentCat][index];
+            document.getElementById('wordPanel').innerText = item.w;
             document.getElementById('wordPanel').classList.remove('hidden');
-            document.getElementById('nextBtn').classList.remove('hidden');
-            document.getElementById('micBtn').disabled = true; 
+            
+            document.getElementById('textPanel').innerText = item.t;
+            document.getElementById('textPanel').classList.remove('hidden');
+            
+            document.getElementById('micBtn').disabled = true; // Stop mic usage
+            document.getElementById('stepReview').classList.remove('hidden'); // Show Read&Listen
+            document.getElementById('nextBtn').classList.remove('hidden'); // Show Next
         }
 
         function goNext() {
             if (index < 7) {
                 index++;
-                loadTrack(); 
+                resetUI();
             } else {
-                alert("Mastered!");
+                alert("Group Mastered!");
                 location.reload();
             }
         }
@@ -516,11 +437,14 @@
         function resetUI() {
             wrongAttempts = 0; 
             document.getElementById('vocabCounter').innerText = `Vocab ${index + 1}`;
+            
+            // Hide answers
             document.getElementById('textPanel').classList.add('hidden');
             document.getElementById('wordPanel').classList.add('hidden');
+            document.getElementById('stepReview').classList.add('hidden');
             document.getElementById('nextBtn').classList.add('hidden');
-            document.getElementById('step2').disabled = true;
-            document.getElementById('step3').disabled = true;
+            
+            // Reset Mic
             document.getElementById('micBtn').disabled = true;
             document.getElementById('micStatus').innerText = "";
             document.getElementById('micStatus').className = "";
