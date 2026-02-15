@@ -36,7 +36,7 @@
         }
 
         .intro-logo {
-            width: 300px; /* UPDATED: Made significantly larger */
+            width: 300px; 
             height: auto;
             margin-bottom: 30px;
             filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5)); 
@@ -151,6 +151,7 @@
         .neon-purple { border-color: #9d00ff; color: #9d00ff; text-shadow: 0 0 8px #9d00ff; box-shadow: 0 0 8px #9d00ff inset; }
         .neon-lime { border-color: #ccff00; color: #ccff00; text-shadow: 0 0 8px #ccff00; box-shadow: 0 0 8px #ccff00 inset; }
         .neon-cyan { border-color: #00e5ff; color: #00e5ff; text-shadow: 0 0 8px #00e5ff; box-shadow: 0 0 8px #00e5ff inset; }
+        .neon-white { border-color: #ffffff; color: #ffffff; text-shadow: 0 0 8px #ffffff; box-shadow: 0 0 8px #ffffff inset; }
 
         /* STUDY BUTTONS */
         .btn { 
@@ -221,6 +222,11 @@
                 <button class="btn-menu neon-red" onclick="initSubject('Crime')">
                     <span class="menu-icon">⚖️</span> <span class="menu-text">Crime</span>
                 </button>
+                
+                <button class="btn-menu neon-white" onclick="initSubject('Education')">
+                    <span class="menu-icon">🎓</span> <span class="menu-text">Education</span>
+                </button>
+
                 <button class="btn-menu neon-lime" onclick="initSubject('Food')">
                     <span class="menu-icon">🍎</span> <span class="menu-text">Food</span>
                 </button>
@@ -236,11 +242,9 @@
                 <button class="btn-menu neon-yellow" onclick="initSubject('Nature')">
                     <span class="menu-icon">🌩️</span> <span class="menu-text">Nature</span>
                 </button>
-                
                 <button class="btn-menu neon-cyan" onclick="initSubject('Religion')">
                     <span class="menu-icon">🛐</span> <span class="menu-text">Religion</span>
                 </button>
-
                 <button class="btn-menu neon-orange" onclick="initSubject('Travel')">
                     <span class="menu-icon">✈️</span> <span class="menu-text">Travel</span>
                 </button>
@@ -305,6 +309,16 @@
                 { file: "crime 6.m4a", t: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", w: "Black market" },
                 { file: "crime 7.m4a", t: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", w: "Blackmail" },
                 { file: "crime 8.m4a", t: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", w: "Loan shark" }
+            ],
+            "Education": [
+                { file: "education 1.m4a", t: "This is the special ceremony where you receive your diploma after finishing school.", w: "Graduation" },
+                { file: "education 2.m4a", t: "This is help or advice given to students about their studies or problems.", w: "Guidance" },
+                { file: "education 3.m4a", t: "This is a short period where a student works at a company to get experience.", w: "Internship" },
+                { file: "education 4.m4a", t: "This is the action of officially signing up for a school or class.", w: "Enroll" },
+                { file: "education 5.m4a", t: "This is doing something dishonest (like using secret notes) to get a good result.", w: "Cheat" },
+                { file: "education 6.m4a", t: "This is a young person who works for an expert to learn a trade by doing the job.", w: "Apprentice" },
+                { file: "education 7.m4a", t: "These are the things you use for writing, like pens, paper, and pencils.", w: "Stationery" },
+                { file: "education 8.m4a", t: "This is a highly skilled expert who teaches a trade to a beginner.", w: "Master" }
             ],
             "Food": [
                 { file: "food 1.m4a", t: "This is the action of moving food or drink from your mouth down your throat.", w: "Swallow" },
