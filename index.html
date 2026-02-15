@@ -148,6 +148,7 @@
         .neon-pink { border-color: #ff00ff; color: #ff00ff; text-shadow: 0 0 8px #ff00ff; box-shadow: 0 0 8px #ff00ff inset; }
         .neon-yellow { border-color: #ffd700; color: #ffd700; text-shadow: 0 0 8px #ffd700; box-shadow: 0 0 8px #ffd700 inset; }
         .neon-orange { border-color: #ff9900; color: #ff9900; text-shadow: 0 0 8px #ff9900; box-shadow: 0 0 8px #ff9900 inset; }
+        .neon-purple { border-color: #9d00ff; color: #9d00ff; text-shadow: 0 0 8px #9d00ff; box-shadow: 0 0 8px #9d00ff inset; }
 
         /* STUDY BUTTONS */
         .btn { 
@@ -221,6 +222,11 @@
                 <button class="btn-menu neon-pink" onclick="initSubject('Health')">
                     <span class="menu-icon">🏥</span> <span class="menu-text">Health</span>
                 </button>
+                
+                <button class="btn-menu neon-purple" onclick="initSubject('Legal')">
+                    <span class="menu-icon">⚖️</span> <span class="menu-text">Legal</span>
+                </button>
+
                 <button class="btn-menu neon-green" onclick="initSubject('Money')">
                     <span class="menu-icon">💰</span> <span class="menu-text">Money</span>
                 </button>
@@ -272,26 +278,6 @@
 
         // --- APP LOGIC ---
         const repoData = {
-            "Crime": [
-                { file: "crime 1.m4a", t: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", w: "Pickpocket" },
-                { file: "crime 2.m4a", t: "This is a criminal who intentionally starts fires to destroy buildings or cars.", w: "Arsonist" },
-                { file: "crime 3.m4a", t: "This is money or a gift that you give to someone (like an official) illegally to get them to do something dishonest for you.", w: "Bribe" },
-                { file: "crime 4.m4a", t: "This is the money that kidnappers demand. You must pay this to get a captured person back safely.", w: "Ransom" },
-                { file: "crime 5.m4a", t: "This is a person who is captured and held prisoner by criminals to force others to pay money.", w: "Hostage" },
-                { file: "crime 6.m4a", t: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", w: "Black market" },
-                { file: "crime 7.m4a", t: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", w: "Blackmail" },
-                { file: "crime 8.m4a", t: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", w: "Loan shark" }
-            ],
-            "Money": [
-                { file: "money 1.m4a", t: "This is money that you must pay to the government to pay for public things like roads and schools.", w: "Tax" },
-                { file: "money 2.m4a", t: "This is the extra money you pay when you borrow money, or the extra money a bank gives you for saving.", w: "Interest" },
-                { file: "money 3.m4a", t: "This is one part of a total payment. You pay smaller amounts every month until the debt is finished.", w: "Installment" },
-                { file: "money 4.m4a", t: "This is the final day or deadline when you must pay a bill or return borrowed money.", w: "Due date" },
-                { file: "money 5.m4a", t: "This is a person or bank that lends money to others and expects to be paid back.", w: "Creditor" },
-                { file: "money 6.m4a", t: "This is a person who promises to pay someone else's debt if that person cannot pay it.", w: "Guarantor" },
-                { file: "money 7.m4a", t: "This is money you give to a landlord before you use their property (deposit). They keep it to make sure you do not break anything.", w: "Caution money" },
-                { file: "money 8.m4a", t: "This is a person who owes money to a bank or another person.", w: "Debtor" }
-            ],
             "Buildings": [
                 { file: "building 1.m4a", t: "This is a very tall building with many floors, usually seen in big cities.", w: "Skyscraper" },
                 { file: "building 2.m4a", t: "This is the person who owns a house or apartment and rents it to other people for money.", w: "Landlord/Landlady" },
@@ -302,6 +288,16 @@
                 { file: "building 7.m4a", t: "This is a very large indoor building that has many different stores, restaurants, and cinemas inside.", w: "Mall" },
                 { file: "building 8.m4a", t: "This is a worker whose job is to fit and repair water pipes, toilets, and baths.", w: "Plumber" }
             ],
+            "Crime": [
+                { file: "crime 1.m4a", t: "This is a person who steals wallets or phones from people's pockets or bags quietly so the victim does not notice.", w: "Pickpocket" },
+                { file: "crime 2.m4a", t: "This is a criminal who intentionally starts fires to destroy buildings or cars.", w: "Arsonist" },
+                { file: "crime 3.m4a", t: "This is money or a gift that you give to someone (like an official) illegally to get them to do something dishonest for you.", w: "Bribe" },
+                { file: "crime 4.m4a", t: "This is the money that kidnappers demand. You must pay this to get a captured person back safely.", w: "Ransom" },
+                { file: "crime 5.m4a", t: "This is a person who is captured and held prisoner by criminals to force others to pay money.", w: "Hostage" },
+                { file: "crime 6.m4a", t: "This is an illegal system or place where people buy and sell things that are banned or hard to find.", w: "Black market" },
+                { file: "crime 7.m4a", t: "This is a crime where someone threatens to tell your private secrets unless you pay them money.", w: "Blackmail" },
+                { file: "crime 8.m4a", t: "This is a person who lends money to people but demands a very high payment back and may threaten violence.", w: "Loan shark" }
+            ],
             "Health": [
                 { file: "health 1.m4a", t: "This is a feeling where your head spins and you feel like you might fall.", w: "Dizziness" },
                 { file: "health 2.m4a", t: "This happens when you suddenly lose consciousness for a short time and fall down.", w: "Faint" },
@@ -311,6 +307,26 @@
                 { file: "health 6.m4a", t: "This is a medical procedure to end a pregnancy so a baby is not born.", w: "Abortion" },
                 { file: "health 7.m4a", t: "This happens when a part of your body gets bigger because of an injury or insect bite.", w: "Swell" },
                 { file: "health 8.m4a", t: "This is a condition where you cannot go to the toilet easily and your stomach feels full.", w: "Constipation" }
+            ],
+            "Legal": [
+                { file: "legal 1.m4a", t: "This is a person who sees a crime or accident and tells the court what happened.", w: "Witness" },
+                { file: "legal 2.m4a", t: "This is money you receive because you were hurt or lost something.", w: "Compensation" },
+                { file: "legal 3.m4a", t: "This is the legal decision about which parent a child will live with after a divorce.", w: "Child custody" },
+                { file: "legal 4.m4a", t: "This is the person who starts a civil case in court (the one complaining).", w: "Plaintiff" },
+                { file: "legal 5.m4a", t: "This is a formal written document asking a court or government for a specific action.", w: "Petition" },
+                { file: "legal 6.m4a", t: "This is money paid to the court so an accused person can stay out of jail before their trial.", w: "Bail" },
+                { file: "legal 7.m4a", t: "This is money one divorced parent pays to the other specifically for the child's costs.", w: "Child alimony" },
+                { file: "legal 8.m4a", t: "This is the person in court who is accused of a crime or doing something wrong.", w: "Defendant" }
+            ],
+            "Money": [
+                { file: "money 1.m4a", t: "This is money that you must pay to the government to pay for public things like roads and schools.", w: "Tax" },
+                { file: "money 2.m4a", t: "This is the extra money you pay when you borrow money, or the extra money a bank gives you for saving.", w: "Interest" },
+                { file: "money 3.m4a", t: "This is one part of a total payment. You pay smaller amounts every month until the debt is finished.", w: "Installment" },
+                { file: "money 4.m4a", t: "This is the final day or deadline when you must pay a bill or return borrowed money.", w: "Due date" },
+                { file: "money 5.m4a", t: "This is a person or bank that lends money to others and expects to be paid back.", w: "Creditor" },
+                { file: "money 6.m4a", t: "This is a person who promises to pay someone else's debt if that person cannot pay it.", w: "Guarantor" },
+                { file: "money 7.m4a", t: "This is money you give to a landlord before you use their property (deposit). They keep it to make sure you do not break anything.", w: "Caution money" },
+                { file: "money 8.m4a", t: "This is a person who owes money to a bank or another person.", w: "Debtor" }
             ],
             "Nature": [
                 { file: "nature 1.m4a", t: "This is a flash of electricity and light that hits the ground during a storm.", w: "Thunderbolt" },
